@@ -13,9 +13,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mwindow.cpp
+        mwindow.cpp \
+    labelmanipulation.cpp
 
-HEADERS  += mwindow.h
+HEADERS  += mwindow.h \
+    labelmanipulation.h
 
 FORMS    += mwindow.ui
 

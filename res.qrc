@@ -52,6 +52,8 @@
         <file>card_pngs/treb_11.png</file>
         <file>card_pngs/treb_12.png</file>
         <file>card_pngs/treb_13.png</file>
+        <file>card_pngs/deck_placeholder.png</file>
+        <file>card_pngs/nothing_placeholder.png</file>
     </qresource>
     <qresource prefix="/img">
         <file>img/fondo.png</file>
