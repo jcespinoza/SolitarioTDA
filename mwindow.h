@@ -2,7 +2,7 @@
 #define MWINDOW_H
 
 #include <QMainWindow>
-#include <QLabel>
+#include "cardlabel.h"
 #include <QDebug>
 
 namespace Ui {
@@ -18,7 +18,10 @@ public:
     ~MWindow();
     void showCard(QLabel*);
     void hideCard(QLabel*);
+    enum family{CUP, DIAMOND, HEART, CLOVER};
     void generateLabels();
+    void deal();
+    void reorderZ();
     QLabel* card_Labels[52];
 
 private:

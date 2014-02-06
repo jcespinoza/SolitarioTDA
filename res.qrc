@@ -39,22 +39,22 @@
         <file>card_pngs/heart_11.png</file>
         <file>card_pngs/heart_12.png</file>
         <file>card_pngs/heart_13.png</file>
-        <file>card_pngs/treb_1.png</file>
-        <file>card_pngs/treb_2.png</file>
-        <file>card_pngs/treb_3.png</file>
-        <file>card_pngs/treb_4.png</file>
-        <file>card_pngs/treb_5.png</file>
-        <file>card_pngs/treb_6.png</file>
-        <file>card_pngs/treb_7.png</file>
-        <file>card_pngs/treb_8.png</file>
-        <file>card_pngs/treb_9.png</file>
-        <file>card_pngs/treb_10.png</file>
-        <file>card_pngs/treb_11.png</file>
-        <file>card_pngs/treb_12.png</file>
-        <file>card_pngs/treb_13.png</file>
         <file>card_pngs/deck_placeholder.png</file>
         <file>card_pngs/nothing_placeholder.png</file>
         <file>card_pngs/card_back.png</file>
+        <file>card_pngs/clov_1.png</file>
+        <file>card_pngs/clov_2.png</file>
+        <file>card_pngs/clov_3.png</file>
+        <file>card_pngs/clov_4.png</file>
+        <file>card_pngs/clov_5.png</file>
+        <file>card_pngs/clov_6.png</file>
+        <file>card_pngs/clov_7.png</file>
+        <file>card_pngs/clov_8.png</file>
+        <file>card_pngs/clov_9.png</file>
+        <file>card_pngs/clov_10.png</file>
+        <file>card_pngs/clov_11.png</file>
+        <file>card_pngs/clov_12.png</file>
+        <file>card_pngs/clov_13.png</file>
     </qresource>
     <qresource prefix="/img">
         <file>img/fondo.png</file>
