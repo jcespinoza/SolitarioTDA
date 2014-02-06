@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include "cardlabel.h"
 #include <QDebug>
+#include "listPointer.h"
 
 namespace Ui {
 class MWindow;
@@ -20,8 +21,10 @@ public:
     void hideCard(QLabel*);
     enum family{CUP, DIAMOND, HEART, CLOVER};
     void generateLabels();
+    ListP families;
     void deal();
     void reorderZ();
+
     QLabel* card_Labels[52];
 
 private:

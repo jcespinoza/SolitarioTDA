@@ -7,8 +7,8 @@ class CardLabel: public QLabel
 {
 public:
     CardLabel(QWidget*);
-    void CardLabel::mousePressEvent(QMouseEvent *);
-    void CardLabel::mouseMoveEvent(QMouseEvent *);
+    void mousePressEvent(QMouseEvent *);
+    void mouseMoveEvent(QMouseEvent *);
     QPoint offset;
 };
 

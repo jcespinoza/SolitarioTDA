@@ -14,10 +14,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mwindow.cpp \
-    cardlabel.cpp
+    cardlabel.cpp \
+    listPointer.cpp
 
 HEADERS  += mwindow.h \
-    cardlabel.h
+    cardlabel.h \
+    listPointer.h
 
 FORMS    += mwindow.ui
 

@@ -3,12 +3,15 @@
 #include <algorithm>
 #include <ctime>
 
+using namespace std;
+
 MWindow::MWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MWindow)
 {
     ui->setupUi(this);
     generateLabels();
+    families = ListP(4);
 }
 
 MWindow::~MWindow()
@@ -44,20 +47,23 @@ void MWindow::hideCard(QLabel *label)
 
 void MWindow::generateLabels()
 {
-
-    QString names[4] = {"cups", "diam", "heart", "clov"};
+    families.insert(0, "cups");
+    families.insert(1, "diam");
+    families.insert(2, "heart");
+    families.insert(3, "clov");
     int index = 0;
-    for(int i = 1; i <= 4; i++){
+    for(int i = 0; i < 4; i++){
         for(int j = 1; j <= 13; j++){
             QLabel* lCard = new CardLabel(this);
-            lCard->setProperty("faceup", false);
+            lCard->setProperty("faceup", true);
             lCard->setProperty("cardid", index);
             card_Labels[index] = lCard;
-            //lCard->setGeometry(20+2*index,20+2*index, 135, 201);
+
             lCard->setGeometry(20,20, 135, 201);
+
             //hideCard(lCard);
             QString ins("background-image: url(:/cards/card_pngs/");
-            ins.append(names[i-1]);
+            ins.append(families.get(i));
             ins.append("_");
             ins.append(QString::number(j));
             ins.append(".png);  background-repeat: none;");
@@ -65,8 +71,8 @@ void MWindow::generateLabels()
             index++;
         }
     }
-    std::srand ( unsigned ( std::time(0) ) );
-    std::random_shuffle(std::begin(card_Labels), std::end(card_Labels));
+    srand ( unsigned ( time(0) ) );
+    random_shuffle(begin(card_Labels),end(card_Labels));
     reorderZ();
 }
 
