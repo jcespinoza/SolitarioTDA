@@ -14,10 +14,10 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mwindow.cpp \
-    labelmanipulation.cpp
+    cardlabel.cpp
 
 HEADERS  += mwindow.h \
-    labelmanipulation.h
+    cardlabel.h
 
 FORMS    += mwindow.ui
 
