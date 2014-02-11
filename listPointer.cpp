@@ -34,7 +34,7 @@ ListP::~ListP(){
 QString ListP::first(){
     if(firstN != NULL)
         return firstN->value;
-    return -1;
+    return 0;
 }
 
 int ListP::insert(int pos, QString val){
@@ -88,7 +88,7 @@ int ListP::printList(){
 QString ListP::last(){
     if(lastN != 0)
         return lastN->value;
-    return -1;
+    return 0;
 }
 
 QString ListP::next(int pos){
@@ -159,7 +159,7 @@ int ListP::purge(){
 
 QString ListP::get(int pos){
     if(pos < 0 || pos > count-1 || pos > size)
-        return -1;
+        return 0;
     Node* cursor = firstN;
     for(int i = 0; i < pos; i++){
         cursor = cursor->next;

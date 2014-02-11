@@ -10,15 +10,18 @@ MWindow::MWindow(QWidget *parent) :
     ui(new Ui::MWindow)
 {
     ui->setupUi(this);
+    family_names = ListPointerT<QString>(4);
+    qDebug() << "SIZE: " << family_names.getSize();
+    img_labels = ListPointerT<QLabel*>(52);
     generateLabels();
-    families = ListP(4);
 }
 
 MWindow::~MWindow()
 {
+    /*
     for(int i = 0; i < 52; i++){
         delete card_Labels[i];
-    }
+    }*/
     delete ui;
 }
 
@@ -45,25 +48,25 @@ void MWindow::hideCard(QLabel *label)
     label->setStyleSheet("background-image: url(:/cards/card_pngs/card_back.png); background-repeat: none;");
 }
 
-void MWindow::generateLabels()
-{
-    families.insert(0, "cups");
-    families.insert(1, "diam");
-    families.insert(2, "heart");
-    families.insert(3, "clov");
+void MWindow::generateLabels(){
+    family_names.insert(0, "cups");
+    family_names.insert(1, "diam");
+    family_names.insert(2, "heart");
+    family_names.insert(3, "clov");
     int index = 0;
     for(int i = 0; i < 4; i++){
         for(int j = 1; j <= 13; j++){
             QLabel* lCard = new CardLabel(this);
             lCard->setProperty("faceup", true);
             lCard->setProperty("cardid", index);
-            card_Labels[index] = lCard;
+            //card_Labels[index] = lCard;
+            img_labels.insert(index,lCard);
 
             lCard->setGeometry(20,20, 135, 201);
 
             //hideCard(lCard);
             QString ins("background-image: url(:/cards/card_pngs/");
-            ins.append(families.get(i));
+            ins.append(family_names.get(i));
             ins.append("_");
             ins.append(QString::number(j));
             ins.append(".png);  background-repeat: none;");
@@ -72,7 +75,9 @@ void MWindow::generateLabels()
         }
     }
     srand ( unsigned ( time(0) ) );
-    random_shuffle(begin(card_Labels),end(card_Labels));
+    //random_shuffle(begin(card_Labels),end(card_Labels));
+    for(int i = 0; i < img_labels.getCount(); i++)
+        img_labels.shuffleItems();
     reorderZ();
 }
 
@@ -84,7 +89,9 @@ void MWindow::deal()
 void MWindow::reorderZ()
 {
     for(int i = 0; i < 52; i++){
-        QLabel *card = card_Labels[i];
+        //QLabel *card = card_Labels[i];
+        QLabel *card = img_labels.get(i);
+        qDebug() << "OK got the item.";
         int index = card->property("cardid").toInt();
         for(int z = 0; z <= index; z++)
             card->raise();
