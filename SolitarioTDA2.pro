@@ -19,7 +19,9 @@ SOURCES += main.cpp\
 
 HEADERS  += mwindow.h \
     cardlabel.h \
-    listPointer.h
+    listPointer.h \
+    ../TDA/listpointert.h \
+    ../TDA/nodet.h
 
 FORMS    += mwindow.ui
 
