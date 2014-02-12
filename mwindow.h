@@ -19,13 +19,17 @@ public:
     ~MWindow();
     void showCard(QLabel*);
     void hideCard(QLabel*);
-    enum family{CUP, DIAMOND, HEART, CLOVER};
     void generateLabels();
     ListPointerT<QString> family_names;
+    ListPointerT<QLabel*> foundCups;
+    ListPointerT<QLabel*> foundClovs;
+    ListPointerT<QLabel*> foundHearts;
+    ListPointerT<QLabel*> foundDiams;
+
     void deal();
     void reorderZ();
 
-    ListPointerT<QLabel*> img_labels;
+    ListPointerT<QLabel*> mainOne;
 
 private:
     Ui::MWindow *ui;

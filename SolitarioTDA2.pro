@@ -21,7 +21,8 @@ HEADERS  += mwindow.h \
     cardlabel.h \
     listPointer.h \
     ../TDA/listpointert.h \
-    ../TDA/nodet.h
+    ../TDA/nodet.h \
+    CardPile.h
 
 FORMS    += mwindow.ui
 
