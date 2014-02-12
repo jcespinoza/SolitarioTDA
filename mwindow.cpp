@@ -11,8 +11,11 @@ MWindow::MWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     family_names = ListPointerT<QString>(4);
-    mainOne = ListPointerT<QLabel*>(52);
+    mainOne = CardPile(this, 52);
     generateLabels();
+    initializePiles();
+
+
 }
 
 MWindow::~MWindow()
@@ -74,6 +77,23 @@ void MWindow::generateLabels(){
     reorderZ();
 }
 
+void MWindow::initializePiles()
+{
+    foundCups = CardPile(this, 13);
+    foundClovs = CardPile(this, 13);
+    foundHearts = CardPile(this, 13);
+    foundDiams = CardPile(this, 13);
+    temp_Store = CardPile(this, 24);
+    pile1 = CardPile(this, 20);
+    pile2 = CardPile(this, 20);
+    pile3 = CardPile(this, 20);
+    pile4 = CardPile(this,20);
+    pile5 = CardPile(this,20);
+    pile6 = CardPile(this, 20);
+    pile7 = CardPile(this, 20);
+    aero = CardPile(this,13);
+}
+
 void MWindow::deal()
 {
 
@@ -81,10 +101,12 @@ void MWindow::deal()
 
 void MWindow::reorderZ()
 {
+    mainOne.fixIndexes();
     for(int i = 0; i < 52; i++){
         QLabel *card = mainOne.get(i);
         int index = card->property("cardid").toInt();
         for(int z = 0; z <= index; z++)
             card->raise();
     }
+
 }

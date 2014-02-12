@@ -21,15 +21,26 @@ public:
     void hideCard(QLabel*);
     void generateLabels();
     ListPointerT<QString> family_names;
-    ListPointerT<QLabel*> foundCups;
-    ListPointerT<QLabel*> foundClovs;
-    ListPointerT<QLabel*> foundHearts;
-    ListPointerT<QLabel*> foundDiams;
+    CardPile foundCups;
+    CardPile foundClovs;
+    CardPile foundHearts;
+    CardPile foundDiams;
+    CardPile temp_Store;
+    CardPile pile1;
+    CardPile pile2;
+    CardPile pile3;
+    CardPile pile4;
+    CardPile pile5;
+    CardPile pile6;
+    CardPile pile7;
+    CardPile aero;
+    CardPile pileArray[11];
 
+    void initializePiles();
     void deal();
     void reorderZ();
 
-    ListPointerT<QLabel*> mainOne;
+    CardPile mainOne;
 
 private:
     Ui::MWindow *ui;

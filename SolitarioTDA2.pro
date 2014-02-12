@@ -15,11 +15,9 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mwindow.cpp \
     cardlabel.cpp \
-    listPointer.cpp
 
 HEADERS  += mwindow.h \
     cardlabel.h \
-    listPointer.h \
     ../TDA/listpointert.h \
     ../TDA/nodet.h \
     CardPile.h
