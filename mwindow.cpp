@@ -17,10 +17,6 @@ MWindow::MWindow(QWidget *parent) :
 
 MWindow::~MWindow()
 {
-    /*
-    for(int i = 0; i < 52; i++){
-        delete card_Labels[i];
-    }*/
     delete ui;
 }
 
@@ -87,12 +83,9 @@ void MWindow::deal()
 void MWindow::reorderZ()
 {
     for(int i = 0; i < 52; i++){
-        //QLabel *card = card_Labels[i];
         QLabel *card = mainOne.get(i);
-        qDebug() << "OK got the item.";
         int index = card->property("cardid").toInt();
         for(int z = 0; z <= index; z++)
             card->raise();
-        qDebug() << i << ":" << " cardid: " << index;
     }
 }
