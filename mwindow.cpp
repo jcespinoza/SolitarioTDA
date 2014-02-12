@@ -69,7 +69,6 @@ void MWindow::generateLabels(){
         }
     }
     srand ( unsigned ( time(0) ) );
-    //random_shuffle(begin(card_Labels),end(card_Labels));
     for(int i = 0; i < mainOne.getCount(); i++)
         mainOne.shuffleItems();
     reorderZ();

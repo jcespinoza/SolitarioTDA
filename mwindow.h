@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "cardlabel.h"
 #include <QDebug>
-#include "../TDA/listpointert.h"
+#include "CardPile.h"
 
 namespace Ui{
 class MWindow;

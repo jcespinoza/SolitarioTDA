@@ -17,6 +17,6 @@ void CardLabel::mouseMoveEvent(QMouseEvent *event)
 
 void CardLabel::mousePressEvent(QMouseEvent *event)
 {
-
+    qDebug() << "\ncard id: " << this->property("cardid");
     offset = event->pos();
 }
