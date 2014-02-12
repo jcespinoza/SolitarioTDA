@@ -15,6 +15,16 @@ void CardLabel::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
+void CardLabel::mouseReleaseEvent(QMouseEvent *)
+{
+
+}
+
+void CardLabel::mouseDoubleClickEvent(QMouseEvent *)
+{
+
+}
+
 void CardLabel::mousePressEvent(QMouseEvent *event)
 {
 

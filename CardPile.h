@@ -3,7 +3,7 @@
 #include "../TDA/listpointert.h"
 #include <QDebug>
 #include <QLabel>
-
+#include <QPoint>
 
 class CardPile: public ListPointerT<QLabel*>{
 public:
@@ -15,6 +15,10 @@ public:
 
     int shown;
     int hidden;
+    QPoint startCorner;
+
+    QPoint getCorner(){return startCorner;}
+    void setCorner(QPoint p){startCorner = p;}
 
     bool isEmpty(){
         return getCount() == 0;

@@ -34,13 +34,19 @@ public:
     CardPile pile6;
     CardPile pile7;
     CardPile aero;
-    CardPile pileArray[11];
+    ListPointerT<CardPile> pileArray;
 
     void initializePiles();
     void deal();
     void reorderZ();
 
     CardPile mainOne;
+public slots:
+    void cardPressed(QMouseEvent*, CardLabel*);
+    void cardMoved(QMouseEvent*, CardLabel *);
+    void cardReleased(QMouseEvent*, CardLabel *);
+    void cardDoubleClick(QMouseEvent*, CardLabel*);
+    void showHideCard(CardLabel*, bool);
 
 private:
     Ui::MWindow *ui;

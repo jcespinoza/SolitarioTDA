@@ -5,10 +5,14 @@
 
 class CardLabel: public QLabel
 {
+    Q_OBJECT
 public:
     CardLabel(QWidget*);
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
+    void mouseReleaseEvent(QMouseEvent*);
+    void mouseDoubleClickEvent(QMouseEvent*);
+
     QPoint offset;
     int family;
     bool hasFaceUp(){
@@ -17,10 +21,15 @@ public:
     int getCardID(){
         return property("cardid").toInt();
     }
+    void setCardID(int id){
+        setProperty("cardid", id);
+    }
     void hide(){
+        emit showHide(this, false);
         setProperty("faceup", false);
     }
     void show(){
+        //emit showHide(this, true);
         setProperty("faceup", true);
     }
     void setFamily(int fam){
@@ -41,9 +50,12 @@ public:
     void setOwnerID(int id){
         setProperty("ownerPile", id);
     }
-Q_SIGNALS:
-
-
+signals:
+    void mousePressed(QMouseEvent*, CardLabel *);
+    void mouseMoved(QMouseEvent*, CardLabel *);
+    void mouseReleased(QMouseEvent*, CardLabel *);
+    void mouseDoubleClick(QMouseEvent*, CardLabel*);
+    void showHide(CardLabel*, bool);
 };
 
 #endif // CARDLABEL_H
