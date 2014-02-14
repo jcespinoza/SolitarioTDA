@@ -1,13 +1,15 @@
 #ifndef CARDLABEL_H
 #define CARDLABEL_H
 #include <QLabel>
+#include <QDebug>
 #include <QMouseEvent>
 
 class CardLabel: public QLabel
 {
     Q_OBJECT
 public:
-    CardLabel(QWidget*);
+    explicit CardLabel(QWidget*);
+
     void mousePressEvent(QMouseEvent *);
     void mouseMoveEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent*);
@@ -15,40 +17,48 @@ public:
 
     QPoint offset;
     int family;
+    int number;
+    int cid;
+    int oid;
+
     bool hasFaceUp(){
         return property("faceup").toBool();
     }
     int getCardID(){
-        return property("cardid").toInt();
+        return cid;
     }
     void setCardID(int id){
         setProperty("cardid", id);
+        cid = id;
     }
     void hide(){
         emit showHide(this, false);
         setProperty("faceup", false);
     }
     void show(){
-        //emit showHide(this, true);
+        emit showHide(this, true);
         setProperty("faceup", true);
     }
     void setFamily(int fam){
         setProperty("family", fam);
+        family = fam;
     }
     int getFamily(){
-       return property("family").toInt();
+       return family;
     }
     int getCardNumber(){
-        return property("number").toInt();
+        return number;
     }
     void setCardNumber(int num){
         setProperty("number", num);
+        number = num;
     }
     int getOwnerID(){
-        return property("ownerPile").toInt();
+
+        return oid;
     }
     void setOwnerID(int id){
-        setProperty("ownerPile", id);
+        oid = id;
     }
 signals:
     void mousePressed(QMouseEvent*, CardLabel *);

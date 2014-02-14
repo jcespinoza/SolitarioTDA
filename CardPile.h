@@ -16,9 +16,27 @@ public:
     int shown;
     int hidden;
     QPoint startCorner;
+    int xc;
+    int yc;
 
-    QPoint getCorner(){return startCorner;}
-    void setCorner(QPoint p){startCorner = p;}
+    int getX(){return xc;}
+    int getY(){return yc;}
+
+    void setX(int p){xc = p;}
+    void setY(int p){yc = p;}
+
+    QPoint getCorner(){
+        return startCorner;
+    }
+    void setCorner(QPoint p){
+
+        startCorner = p;
+    }
+
+    bool operator==(const CardPile& lhs){
+        return (lhs.firstN == firstN && lhs.count == count
+                && lhs.xc == xc && lhs.yc == yc);
+    }
 
     bool isEmpty(){
         return getCount() == 0;
@@ -39,9 +57,7 @@ public:
         return pileID;
     }
 
-private:
     int pileID;
-
     QWidget* parent;
 };
 

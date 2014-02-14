@@ -4,6 +4,10 @@
 CardLabel::CardLabel(QWidget *parent):QLabel(parent)
 {
     setEnabled(true);
+    cid = 0;
+    oid = 0;
+    family = 0;
+    number = 0;
 }
 
 void CardLabel::mouseMoveEvent(QMouseEvent *event)
