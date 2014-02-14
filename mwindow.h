@@ -39,8 +39,6 @@ public:
 
     void initializePiles();
     void deal();
-    void reorderZ();
-    void reorderZ(CardPile pile);
 
     CardPile mainOne;
 public slots:

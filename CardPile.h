@@ -50,6 +50,7 @@ public:
             cursor = cursor->next;
         }
     }
+
     void setPileID(int id){
         pileID = id;
     }
