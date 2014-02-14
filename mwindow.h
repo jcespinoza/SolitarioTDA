@@ -17,8 +17,8 @@ class MWindow : public QMainWindow
 public:
     explicit MWindow(QWidget *parent = 0);
     ~MWindow();
-    void showCard(QLabel*);
-    void hideCard(QLabel*);
+    void showCard(CardLabel*);
+    void hideCard(CardLabel*);
     void generateLabels();
     ListPointerT<QString> family_names;
     CardPile foundCups;

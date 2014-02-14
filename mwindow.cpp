@@ -29,13 +29,13 @@ MWindow::~MWindow()
     delete ui;
 }
 
-void MWindow::showCard(QLabel *label)
+void MWindow::showCard(CardLabel *label)
 {
 
 
 }
 
-void MWindow::hideCard(QLabel *label)
+void MWindow::hideCard(CardLabel *label)
 {
 
 }
@@ -89,26 +89,49 @@ void MWindow::initializePiles()
     pileArray.insert(0, mainOne); //mainOne has index 0
 
     pile1 = CardPile(this, 20); pileArray.insert(1, pile1); //piles get their digit as index
+    pile1.setCorner(QPoint(20,165));
     pile2 = CardPile(this, 20); pileArray.insert(2, pile2);
+    pile2.setCorner(QPoint(160,165));
     pile3 = CardPile(this, 20); pileArray.insert(3, pile3);
+    pile3.setCorner(QPoint(300,165));
     pile4 = CardPile(this,20); pileArray.insert(4, pile4);
+    pile4.setCorner(QPoint(440,165));
     pile5 = CardPile(this,20); pileArray.insert(5, pile5);
+    pile5.setCorner(QPoint(580,165));
     pile6 = CardPile(this, 20); pileArray.insert(6, pile6);
+    pile6.setCorner(QPoint(720,165));
     pile7 = CardPile(this, 20); pileArray.insert(7, pile7); //piles get their digit as index
+    pile1.setCorner(QPoint(860,165));
+
     temp_Store = CardPile(this, 24); pileArray.insert(8, temp_Store); //index 8
+    temp_Store.setCorner(QPoint(174,20));
     foundCups = CardPile(this, 13); pileArray.insert(9, foundCups); //index 9
+    foundCups.setCorner(QPoint(384,20));
     foundClovs = CardPile(this, 13); pileArray.insert(10, foundClovs); //index 10
+    foundClovs.setCorner(QPoint(538,20));
     foundHearts = CardPile(this, 13); pileArray.insert(11, foundHearts); //index 11
+    foundHearts.setCorner(QPoint(692,20));
     foundDiams = CardPile(this, 13); pileArray.insert(12, foundDiams); //index 12
+    foundDiams.setCorner(QPoint(846,20));
 
     aero = CardPile(this,13); pileArray.insert(13, aero); //index 13
 }
 
 void MWindow::deal()
 {
+
     for(int i = 1; i <= 7; i++){
-        for(int j = 0; j > i; j++){
-            //NodeT<QLabel*>* mCard = mainOne.disconnectLast();
+        for(int j = 0; j <= i; j++){
+            //NodeT<CardLabel*>* mCard = mainOne.disconnectLast();
+            //qDebug() << "\nDisconnectd " << mCard;
+            //pileArray.get(i).append(mCard);
+            qDebug() << "\nGot here";
+            //CardLabel* temp = mCard->value;
+            qDebug() << "\ncreated mCard";
+            //temp->setOwnerID(i);
+            //temp->move(pileArray.get(i).getCorner());
+            //if(j == i)
+              //  temp->show();
         }
     }
 }
@@ -117,7 +140,7 @@ void MWindow::reorderZ()
 {
     mainOne.fixIndexes();
     for(int i = 0; i < 52; i++){
-        QLabel *card = mainOne.get(i);
+        CardLabel *card = mainOne.get(i);
         int index = card->property("cardid").toInt();
         for(int z = 0; z <= index; z++)
             card->raise();

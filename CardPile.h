@@ -2,12 +2,12 @@
 #define CARDPILE_H
 #include "../TDA/listpointert.h"
 #include <QDebug>
-#include <QLabel>
+#include "cardlabel.h"
 #include <QPoint>
 
-class CardPile: public ListPointerT<QLabel*>{
+class CardPile: public ListPointerT<CardLabel*>{
 public:
-    CardPile(QWidget* paren = 0, int size = 10):ListPointerT<QLabel*>(size){parent = paren;}
+    CardPile(QWidget* paren = 0, int size = 10):ListPointerT<CardLabel*>(size){parent = paren;}
     const int static CUPS = 0;
     const int static DIAMONDS = 1;
     const int static HEARTS = 2;
@@ -24,7 +24,7 @@ public:
         return getCount() == 0;
     }
     void fixIndexes(){
-        NodeT<QLabel*> *cursor = this->firstN;
+        NodeT<CardLabel*> *cursor = this->firstN;
         for(int i = 0; i < getCount();i ++){
             if(cursor != 0){
                 cursor->value->setProperty("cardid", i);
