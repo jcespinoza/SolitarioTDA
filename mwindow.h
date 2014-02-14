@@ -35,10 +35,12 @@ public:
     CardPile pile7;
     CardPile aero;
     ListPointerT<CardPile> pileArray;
+    CardPile* piles;
 
     void initializePiles();
     void deal();
     void reorderZ();
+    void reorderZ(CardPile pile);
 
     CardPile mainOne;
 public slots:

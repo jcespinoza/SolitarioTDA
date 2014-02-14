@@ -31,6 +31,6 @@ void CardLabel::mouseDoubleClickEvent(QMouseEvent *)
 
 void CardLabel::mousePressEvent(QMouseEvent *event)
 {
-
+    raise();
     offset = event->pos();
 }

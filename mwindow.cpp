@@ -10,6 +10,8 @@ MWindow::MWindow(QWidget *parent) :
     ui(new Ui::MWindow)
 {
     ui->setupUi(this);
+    piles = new CardPile[14];
+    pileArray = ListPointerT<CardPile>(14);
     family_names = ListPointerT<QString>(4);
     family_names.insert(0, "cups");
     family_names.insert(1, "diam");
@@ -31,13 +33,12 @@ MWindow::~MWindow()
 
 void MWindow::showCard(CardLabel *label)
 {
-
-
+    label;
 }
 
 void MWindow::hideCard(CardLabel *label)
 {
-
+    label;
 }
 
 void MWindow::showHideCard(CardLabel *card, bool v)
@@ -74,6 +75,7 @@ void MWindow::generateLabels(){
             lCard->setCardNumber(j);
             lCard->setOwnerID( 0 );
             lCard->show();
+            lCard->raise();
 
             mainOne.insert(index,lCard);
             lCard->setGeometry(20,20, 135, 201);
@@ -83,65 +85,78 @@ void MWindow::generateLabels(){
     srand ( unsigned ( time(0) ) );
     for(int i = 0; i < mainOne.getCount(); i++)
         mainOne.shuffleItems();
-    reorderZ();
 }
 
 void MWindow::initializePiles()
 {
-    pileArray = ListPointerT<CardPile>(14);
-    pileArray.insert(0, mainOne); //mainOne has index 0
+    //pileArray.insert(0, mainOne); //mainOne has index 0
+    piles[0] = mainOne;
 
-    pile1 = CardPile(this, 20); pileArray.insert(pile1); //piles get their digit as index
+    pile1 = CardPile(this, 20); //pileArray.insert(pile1); //piles get their digit as index
     pile1.setCorner(QPoint(20,235));
+    piles[1] = pile1;
     pile1.setX(20);
     pile1.setY(165);
-    //qDebug() << "OK PRINT: " << pileArray.get(1).getCorner();
-    qDebug() << "PILE1 " << pile1.getCorner();
-    pile2 = CardPile(this, 20); pileArray.insert(2, pile2);
+    //qDebug() << "OK PRINT: " << //pileArray.get(1).getCorner();
+    //qDebug() << "PILE1 " << pile1.getCorner();
+    pile2 = CardPile(this, 20); //pileArray.insert(2, pile2);
     pile2.setCorner(QPoint(160,235));
-    pile3 = CardPile(this, 20); pileArray.insert(3, pile3);
+    piles[2] = pile2;
+    pile3 = CardPile(this, 20); //pileArray.insert(3, pile3);
     pile3.setCorner(QPoint(300,235));
-    pile4 = CardPile(this,20); pileArray.insert(4, pile4);
+    piles[3] = pile3;
+    pile4 = CardPile(this,20); //pileArray.insert(4, pile4);
     pile4.setCorner(QPoint(440,235));
-    pile5 = CardPile(this,20); pileArray.insert(5, pile5);
+    piles[4] = pile4;
+    pile5 = CardPile(this,20); //pileArray.insert(5, pile5);
     pile5.setCorner(QPoint(580,235));
-    pile6 = CardPile(this, 20); pileArray.insert(6, pile6);
+    piles[5] = pile5;
+    pile6 = CardPile(this, 20); //pileArray.insert(6, pile6);
     pile6.setCorner(QPoint(720,235));
-    pile7 = CardPile(this, 20); pileArray.insert(7, pile7); //piles get their digit as index
+    piles[6] = pile6;
+    pile7 = CardPile(this, 20); //pileArray.insert(7, pile7); //piles get their digit as index
     pile7.setCorner(QPoint(860,235));
+    piles[7] = pile7;
 
-    temp_Store = CardPile(this, 24); pileArray.insert(8, temp_Store); //index 8
+    temp_Store = CardPile(this, 24); //pileArray.insert(8, temp_Store); //index 8
     temp_Store.setCorner(QPoint(174,20));
-    foundCups = CardPile(this, 13); pileArray.insert(9, foundCups); //index 9
+    piles[8] = temp_Store;
+    foundCups = CardPile(this, 13); //pileArray.insert(9, foundCups); //index 9
     foundCups.setCorner(QPoint(384,20));
-    foundClovs = CardPile(this, 13); pileArray.insert(10, foundClovs); //index 10
+    piles[9] = foundCups;
+    foundClovs = CardPile(this, 13); //pileArray.insert(10, foundClovs); //index 10
     foundClovs.setCorner(QPoint(538,20));
-    foundHearts = CardPile(this, 13); pileArray.insert(11, foundHearts); //index 11
+    piles[10] = foundClovs;
+    foundHearts = CardPile(this, 13); //pileArray.insert(11, foundHearts); //index 11
     foundHearts.setCorner(QPoint(692,20));
-    foundDiams = CardPile(this, 13); pileArray.insert(12, foundDiams); //index 12
+    piles[11] = foundHearts;
+    foundDiams = CardPile(this, 13); //pileArray.insert(12, foundDiams); //index 12
     foundDiams.setCorner(QPoint(846,20));
+    piles[12] = foundDiams;
 
-    aero = CardPile(this,13); pileArray.insert(13, aero); //index 13
-    qDebug () << "\n HOW MANY? " << pileArray.getCount();
+    aero = CardPile(this,13); //pileArray.insert(13, aero); //index 13
+    piles[13] = aero;
 }
 
 void MWindow::deal()
 {
 
     for(int i = 1; i <= 7; i++){
-        for(int j = 0; j <= i; j++){
+        for(int j = 1; j <= i; j++){
             NodeT<CardLabel*>* mCard = mainOne.disconnectLast();
             pileArray.get(i).append(mCard);
             CardLabel* temp = mCard->value;
             temp->setOwnerID(i);
-            temp->move(pile1.getCorner());
+            temp->move(piles[i].getCorner());
             //qDebug() << "\nOn ta bebe? Aki ta: " << temp->pos();
+            temp->hide();
+            temp->raise();
             if(j == i)
                 temp->show();
         }
     }
-    qDebug() << "CORNER on P1 " << pile1.getCorner();
 }
+
 
 void MWindow::reorderZ()
 {
@@ -155,22 +170,39 @@ void MWindow::reorderZ()
 
 }
 
+void MWindow::reorderZ(CardPile pile)
+{
+    pile.fixIndexes();
+    for(int i = 0; i < pile.getCount(); i++){
+        CardLabel *card = pile.get(i);
+        int index = card->getCardID();
+        for(int z = 0; z <= 28; z++)
+            card->raise();
+        for(int z = 0; z <= index; z++)
+            card->lower();
+    }
+}
+
 void MWindow::cardPressed(QMouseEvent *e, CardLabel *card)
 {
-
+    e;
+    card;
 }
 
 void MWindow::cardMoved(QMouseEvent *e, CardLabel *card)
 {
-
+    e;
+    card;
 }
 
 void MWindow::cardReleased(QMouseEvent *e, CardLabel *card)
 {
-
+    e;
+    card;
 }
 
 void MWindow::cardDoubleClick(QMouseEvent *e, CardLabel *card)
 {
-
+    e;
+    card;
 }
