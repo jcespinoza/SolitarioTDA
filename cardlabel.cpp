@@ -33,7 +33,8 @@ void CardLabel::mouseDoubleClickEvent(QMouseEvent *e)
 void CardLabel::mousePressEvent(QMouseEvent *event)
 {
     if(!hasFaceUp()) return;
-    raise();
+    if(isOnTop())
+        raise();
     qDebug() << "myID is: " << getCardID() << "Am I on top?" << isOnTop();
     offset = event->pos();
 }

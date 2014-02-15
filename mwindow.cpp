@@ -47,25 +47,19 @@ void MWindow::showHideCard(CardLabel *card, bool v)
     }
 }
 
-void MWindow::tranferCards(CardPile &to, NodeT<CardLabel*>* first)
+void MWindow::tranferCards(CardPile &to, NodeT<CardLabel*>* first, bool showPrevious)
 {
-    to.append(first);
     if(first != 0){
-        first->value->move(to.getCorner());
+        QPoint newCoords = to.getCorner();
+        NodeT<CardLabel*>* ls = to.last();
+        if(ls != 0 && showPrevious)
+            newCoords = ls->value->pos() + QPoint(0, 27);
+        first->value->move(newCoords);
+        to.append(first);
         first->value->setOwnerID(to.getPileID());
         to.makeLastOnTop();
         to.fixIndexes();
     }
-    /*
-    int pileid = first->getOwnerID();
-    CardPile oldpile = piles[pileid];
-
-    NodeT<CardLabel*>* card = oldpile.
-
-    NodeT<CardLabel*>* nCard = piles[0].disconnectLast();
-    nCard->value->move(piles[8].getCorner());
-    piles[8].append(nCard);
-    */
 }
 
 void MWindow::generateLabels(){
@@ -84,7 +78,7 @@ void MWindow::generateLabels(){
             lCard->setFamily( i );
             lCard->setCardNumber(j);
             lCard->setOwnerID( 0 );
-            lCard->show();
+            lCard->hide();
             lCard->setOnTop(false);
             lCard->raise();
 
@@ -213,21 +207,21 @@ void MWindow::cardReleased(QMouseEvent *, CardLabel *)
 
 void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)
 {
-    qDebug() << "OK here 1";
     int wPile = card->getOwnerID();
-    qDebug() << "Owner was " << wPile;
     if(wPile != 0 || !card->isOnTop())
         return;
 
     NodeT<CardLabel*>* nCard = mainOne.disconnectLast();
+    nCard->value->show();
+    tranferCards(piles[8], nCard, true);
+
+    NodeT<CardLabel*>* nCard2 = mainOne.disconnectLast();
+    nCard2->value->show();
+    tranferCards(piles[8], nCard2, true);
+    NodeT<CardLabel*>* nCard3 = mainOne.disconnectLast();
+    nCard3->value->show();
+    tranferCards(piles[8], nCard3, true);
+
     mainOne.makeLastOnTop();
     mainOne.fixIndexes();
-    qDebug() << "OK here";
-    tranferCards(piles[8], nCard);
-    /*
-    NodeT<CardLabel*>* nCard2 = piles[0].disconnectLast();
-    tranferCards(piles[8], nCard);
-    NodeT<CardLabel*>* nCard3 = piles[0].disconnectLast();
-    tranferCards(piles[8], nCard);
-    */
 }
