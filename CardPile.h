@@ -45,8 +45,34 @@ public:
         NodeT<CardLabel*> *cursor = this->firstN;
         for(int i = 0; i < getCount();i ++){
             if(cursor != 0){
-                cursor->value->setProperty("cardid", i);
+                cursor->value->setCardID(i);
+                cursor->value->raise();
             }
+            cursor = cursor->next;
+        }
+    }
+
+    void makeLastOnTop(){
+        NodeT<CardLabel*>* cursor = firstN;
+        while(cursor != 0){
+            cursor->value->setOnTop(false);
+            if(cursor->next == 0)
+                cursor->value->setOnTop(true);
+            cursor = cursor->next;
+        }
+    }
+
+    void unconverLast(){
+        if(count>1){
+            get(count-1)->show();
+            get(count-1)->setOnTop(true);
+        }
+    }
+
+    void setAllHidden(){
+        NodeT<CardLabel*>* cursor = firstN;
+        while(cursor != 0){
+            cursor->value->hide();
             cursor = cursor->next;
         }
     }

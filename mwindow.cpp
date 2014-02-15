@@ -20,8 +20,8 @@ MWindow::MWindow(QWidget *parent) :
 
     mainOne = CardPile(this);
     mainOne.setCorner(QPoint(20,20));
-    generateLabels();
     initializePiles();
+    generateLabels();
     deal();
 }
 
@@ -47,6 +47,25 @@ void MWindow::showHideCard(CardLabel *card, bool v)
     }
 }
 
+void MWindow::tranferCards(CardPile &to, NodeT<CardLabel*>* first)
+{
+    to.append(first);
+    if(first != 0){
+        first->value->move(to.getCorner());
+        to.makeLastOnTop();
+    }
+    /*
+    int pileid = first->getOwnerID();
+    CardPile oldpile = piles[pileid];
+
+    NodeT<CardLabel*>* card = oldpile.
+
+    NodeT<CardLabel*>* nCard = piles[0].disconnectLast();
+    nCard->value->move(piles[8].getCorner());
+    piles[8].append(nCard);
+    */
+}
+
 void MWindow::generateLabels(){
     int index = 0;
     for(int i = 0; i < 4; i++){
@@ -64,7 +83,7 @@ void MWindow::generateLabels(){
             lCard->setCardNumber(j);
             lCard->setOwnerID( 0 );
             lCard->show();
-            lCard->setOnTop(index == 51);
+            lCard->setOnTop(false);
             lCard->raise();
 
             mainOne.insert(index,lCard);
@@ -75,6 +94,7 @@ void MWindow::generateLabels(){
     srand ( unsigned ( time(0) ) );
     for(int i = 0; i < mainOne.getCount(); i++)
         mainOne.shuffleItems();
+    mainOne.fixIndexes();
 }
 
 void MWindow::initializePiles()
@@ -150,19 +170,27 @@ void MWindow::initializePiles()
 
 void MWindow::deal()
 {
+
     for(int i = 1; i <= 7; i++){
         for(int j = 1; j <= i; j++){
             NodeT<CardLabel*>* mCard = mainOne.disconnectLast();
-            pileArray.get(i).append(mCard);
+            //pileArray.get(i).append(mCard);
+            piles[i].append(mCard);
             CardLabel* temp = mCard->value;
             temp->setOwnerID(i);
             temp->move(piles[i].getCorner());
             temp->hide();
-            temp->raise();
-            if(j == i)
+            temp->setOnTop(false);
+            if(j == i){
                 temp->show();
+                temp->setOnTop(true);
+            }
         }
+        piles[i].fixIndexes();
     }
+    mainOne.fixIndexes();
+    mainOne.updateCount();
+    mainOne.last()->value->setOnTop(true);
 }
 
 
@@ -183,7 +211,20 @@ void MWindow::cardReleased(QMouseEvent *, CardLabel *)
 
 void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)
 {
+    qDebug() << "OK here 1";
     int wPile = card->getOwnerID();
-    if(wPile != 0)
+    qDebug() << "Owner was " << wPile;
+    if(wPile != 0 || !card->isOnTop())
         return;
+
+    NodeT<CardLabel*>* nCard = mainOne.disconnectLast();
+    mainOne.makeLastOnTop();
+    qDebug() << "OK here";
+    tranferCards(piles[8], nCard);
+    /*
+    NodeT<CardLabel*>* nCard2 = piles[0].disconnectLast();
+    tranferCards(piles[8], nCard);
+    NodeT<CardLabel*>* nCard3 = piles[0].disconnectLast();
+    tranferCards(piles[8], nCard);
+    */
 }

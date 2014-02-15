@@ -45,6 +45,7 @@ public slots:
     void cardReleased(QMouseEvent*, CardLabel *);
     void cardDoubleClick(QMouseEvent*, CardLabel*);
     void showHideCard(CardLabel*, bool);
+    void tranferCards(CardPile &to, NodeT<CardLabel*>* first );
 
 private:
     Ui::MWindow *ui;

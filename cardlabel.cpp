@@ -34,5 +34,6 @@ void CardLabel::mousePressEvent(QMouseEvent *event)
 {
     if(!hasFaceUp()) return;
     raise();
+    qDebug() << "myID is: " << getCardID() << "Am I on top?" << isOnTop();
     offset = event->pos();
 }
