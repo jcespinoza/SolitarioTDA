@@ -10,6 +10,9 @@ MWindow::MWindow(QWidget *parent) :
     ui(new Ui::MWindow)
 {
     ui->setupUi(this);
+
+    ui->main_deck->installEventFilter(this);
+
     piles = new CardPile[14];
     pileArray = ListPointerT<CardPile>();
     family_names = ListPointerT<QString>();
@@ -30,68 +33,6 @@ MWindow::~MWindow()
     delete ui;
 }
 
-void MWindow::showHideCard(CardLabel *card, bool v)
-{
-    if(v){
-        QString ins("background-image: url(:/cards/card_pngs/");
-        int famin = card->getFamily();
-        QString fam(family_names.get( famin ));
-
-        ins.append( fam );
-        ins.append("_");
-        ins.append(QString::number( card->getCardNumber() ));
-        ins.append(".png);  background-repeat: none;");
-        card->setStyleSheet(ins);
-    }else{
-        card->setStyleSheet("background-image: url(:/cards/card_pngs/card_back.png); background-repeat: none;");
-    }
-}
-
-void MWindow::tranferCards(CardPile &to, NodeT<CardLabel*>* first, bool showPrevious)
-{
-    if(first != 0){
-        QPoint newCoords = to.getCorner();
-        NodeT<CardLabel*>* ls = to.last();
-        if(ls != 0 && showPrevious)
-            newCoords = ls->value->pos() + QPoint(0, 27);
-        first->value->move(newCoords);
-        to.append(first);
-        first->value->setOwnerID(to.getPileID());
-        to.makeLastOnTop();
-        to.fixIndexes();
-    }
-}
-
-void MWindow::generateLabels(){
-    int index = 0;
-    for(int i = 0; i < 4; i++){
-        for(int j = 1; j <= 13; j++){
-            CardLabel* lCard = new CardLabel(this);
-            //lCard->setProperty("faceup", true);
-            //lCard->setProperty("cardid", index);
-            connect(lCard, SIGNAL(showHide(CardLabel*,bool)), this, SLOT(showHideCard(CardLabel*,bool)));
-            connect(lCard, SIGNAL(mousePressed(QMouseEvent*,CardLabel*)), this, SLOT(cardPressed(QMouseEvent*,CardLabel*)));
-            connect(lCard, SIGNAL(mouseDoubleClick(QMouseEvent*,CardLabel*)), this, SLOT(cardDoubleClick(QMouseEvent*,CardLabel*)));
-            connect(lCard, SIGNAL(mouseReleased(QMouseEvent*,CardLabel*)), this, SLOT(cardReleased(QMouseEvent*,CardLabel*)));
-            connect(lCard, SIGNAL(mouseMoved(QMouseEvent*,CardLabel*)), this, SLOT(cardMoved(QMouseEvent*,CardLabel*)));
-            lCard->setCardID(index);
-            lCard->setFamily( i );
-            lCard->setCardNumber(j);
-            lCard->setOwnerID( 0 );
-            lCard->hide();
-            lCard->setOnTop(false);
-            lCard->raise();
-
-            mainOne.insert(index,lCard);
-            lCard->setGeometry(20,20, 135, 201);
-            index++;
-        }
-    }
-    srand ( unsigned ( time(0) ) );
-    for(int i = 0; i < mainOne.getCount(); i++)
-        mainOne.shuffleItems();
-    mainOne.fixIndexes();
-}
 
 void MWindow::initializePiles()
 {
@@ -164,6 +105,81 @@ void MWindow::initializePiles()
     piles[13] = aero;
 }
 
+void MWindow::showHideCard(CardLabel *card, bool v)
+{
+    if(v){
+        QString ins("background-image: url(:/cards/card_pngs/");
+        int famin = card->getFamily();
+        QString fam(family_names.get( famin ));
+
+        ins.append( fam );
+        ins.append("_");
+        ins.append(QString::number( card->getCardNumber() ));
+        ins.append(".png);  background-repeat: none;");
+        card->setStyleSheet(ins);
+    }else{
+        card->setStyleSheet("background-image: url(:/cards/card_pngs/card_back.png); background-repeat: none;");
+    }
+}
+
+void MWindow::tranferCards(CardPile &to, NodeT<CardLabel*>* first, bool showPrevious)
+{
+    if(first != 0){
+        QPoint newCoords = to.getCorner();
+        NodeT<CardLabel*>* ls = to.last();
+        if(ls != 0 && showPrevious)
+            newCoords = ls->value->pos() + QPoint(0, 27);
+        first->value->move(newCoords);
+        to.append(first);
+        first->value->setOwnerID(to.getPileID());
+        to.makeLastOnTop();
+        to.fixIndexes();
+    }
+}
+
+void MWindow::resetMain()
+{
+    //Method to reset the main pile here
+    NodeT<CardLabel*>* nCard = piles[8].disconnectLast();
+    while(nCard != 0){
+        nCard->value->hide();
+        tranferCards(mainOne, nCard, false);
+        nCard = piles[8].disconnectLast();
+    }
+    piles[8].makeLastOnTop();
+    piles[8].fixIndexes();
+}
+
+void MWindow::generateLabels(){
+    int index = 0;
+    for(int i = 0; i < 4; i++){
+        for(int j = 1; j <= 13; j++){
+            CardLabel* lCard = new CardLabel(this);
+            connect(lCard, SIGNAL(showHide(CardLabel*,bool)), this, SLOT(showHideCard(CardLabel*,bool)));
+            connect(lCard, SIGNAL(mousePressed(QMouseEvent*,CardLabel*)), this, SLOT(cardPressed(QMouseEvent*,CardLabel*)));
+            connect(lCard, SIGNAL(mouseDoubleClick(QMouseEvent*,CardLabel*)), this, SLOT(cardDoubleClick(QMouseEvent*,CardLabel*)));
+            connect(lCard, SIGNAL(mouseReleased(QMouseEvent*,CardLabel*)), this, SLOT(cardReleased(QMouseEvent*,CardLabel*)));
+            connect(lCard, SIGNAL(mouseMoved(QMouseEvent*,CardLabel*)), this, SLOT(cardMoved(QMouseEvent*,CardLabel*)));
+            lCard->setCardID(index);
+            lCard->setFamily( i );
+            lCard->setCardNumber(j);
+            lCard->setOwnerID( 0 );
+            lCard->hide();
+            lCard->setOnTop(false);
+            lCard->raise();
+
+            mainOne.insert(index,lCard);
+            lCard->setGeometry(20,20, 135, 201);
+            index++;
+        }
+    }
+    srand ( unsigned ( time(0) ) );
+    for(int i = 0; i < mainOne.getCount(); i++)
+        mainOne.shuffleItems();
+    mainOne.fixIndexes();
+}
+
+
 void MWindow::deal()
 {
 
@@ -189,6 +205,14 @@ void MWindow::deal()
     mainOne.last()->value->setOnTop(true);
 }
 
+void MWindow::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    /*This is a MWindow's Event to handle the emptyness of the main deck*/
+    if(childAt(e->pos()) == ui->main_deck){
+        resetMain();
+    }
+}
+
 
 void MWindow::cardPressed(QMouseEvent *, CardLabel *)
 {
@@ -200,8 +224,9 @@ void MWindow::cardMoved(QMouseEvent *, CardLabel *)
 
 }
 
-void MWindow::cardReleased(QMouseEvent *, CardLabel *)
+void MWindow::cardReleased(QMouseEvent *, CardLabel *card)
 {
+    int oldpid = card->getOwnerID();
 
 }
 
@@ -213,14 +238,14 @@ void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)
 
     NodeT<CardLabel*>* nCard = mainOne.disconnectLast();
     nCard->value->show();
-    tranferCards(piles[8], nCard, true);
+    tranferCards(piles[8], nCard, false);
 
     NodeT<CardLabel*>* nCard2 = mainOne.disconnectLast();
     nCard2->value->show();
-    tranferCards(piles[8], nCard2, true);
+    tranferCards(piles[8], nCard2, false);
     NodeT<CardLabel*>* nCard3 = mainOne.disconnectLast();
     nCard3->value->show();
-    tranferCards(piles[8], nCard3, true);
+    tranferCards(piles[8], nCard3, false);
 
     mainOne.makeLastOnTop();
     mainOne.fixIndexes();

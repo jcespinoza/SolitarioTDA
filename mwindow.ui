@@ -28,6 +28,9 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QLabel" name="main_deck">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -136,25 +139,6 @@
     </property>
     <property name="pixmap">
      <pixmap resource="res.qrc">:/cards/card_pngs/nothing_placeholder.png</pixmap>
-    </property>
-   </widget>
-   <widget class="QFrame" name="frame">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>20</y>
-      <width>135</width>
-      <height>201</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">background-image: url(:/cards/card_pngs/deck_placeholder.png);</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Raised</enum>
     </property>
    </widget>
   </widget>

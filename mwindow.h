@@ -37,7 +37,7 @@ public:
 
     void initializePiles();
     void deal();
-
+    void mouseDoubleClickEvent(QMouseEvent*);
     CardPile mainOne;
 public slots:
     void cardPressed(QMouseEvent*, CardLabel*);
@@ -46,6 +46,7 @@ public slots:
     void cardDoubleClick(QMouseEvent*, CardLabel*);
     void showHideCard(CardLabel*, bool);
     void tranferCards(CardPile &to, NodeT<CardLabel*>* first , bool showPrevious);
+    void resetMain();
 
 private:
     Ui::MWindow *ui;
