@@ -17,7 +17,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MWindow</string>
+   <string>JC's Solitaire</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res.qrc">
+    <normaloff>:/img/img/Solitaire.png</normaloff>:/img/img/Solitaire.png</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">background-image: url(:/img/img/fondo.png)</string>

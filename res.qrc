@@ -58,5 +58,6 @@
     </qresource>
     <qresource prefix="/img">
         <file>img/fondo.png</file>
+        <file>img/Solitaire.png</file>
     </qresource>
 </RCC>
