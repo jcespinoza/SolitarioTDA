@@ -23,22 +23,11 @@ MWindow::MWindow(QWidget *parent) :
     generateLabels();
     initializePiles();
     deal();
-
 }
 
 MWindow::~MWindow()
 {
     delete ui;
-}
-
-void MWindow::showCard(CardLabel *label)
-{
-    label;
-}
-
-void MWindow::hideCard(CardLabel *label)
-{
-    label;
 }
 
 void MWindow::showHideCard(CardLabel *card, bool v)
@@ -75,6 +64,7 @@ void MWindow::generateLabels(){
             lCard->setCardNumber(j);
             lCard->setOwnerID( 0 );
             lCard->show();
+            lCard->setOnTop(index == 51);
             lCard->raise();
 
             mainOne.insert(index,lCard);

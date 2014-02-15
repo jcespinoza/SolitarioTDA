@@ -20,6 +20,11 @@ public:
     int number;
     int cid;
     int oid;
+    bool isOnTopB;
+
+
+    bool isOnTop(){return isOnTopB;}
+    void setOnTop(bool val){isOnTopB = val;}
 
     bool hasFaceUp(){
         return property("faceup").toBool();
