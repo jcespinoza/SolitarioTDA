@@ -7,7 +7,7 @@
 
 class CardPile: public ListPointerT<CardLabel*>{
 public:
-    CardPile(QWidget* paren = 0, int size = 10):ListPointerT<CardLabel*>(size){parent = paren;}
+    CardPile(QWidget* paren = 0):ListPointerT<CardLabel*>(){parent = paren;}
     const int static CUPS = 0;
     const int static DIAMONDS = 1;
     const int static HEARTS = 2;
