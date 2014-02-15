@@ -91,7 +91,7 @@ void MWindow::initializePiles()
 {
     //pileArray.insert(0, mainOne); //mainOne has index 0
     piles[0] = mainOne;
-    pile0.setPileID(0);
+    mainOne.setPileID(0);
 
     pile1 = CardPile(this, 20); //pileArray.insert(pile1); //piles get their digit as index
     pile1.setCorner(QPoint(20,235));
