@@ -52,7 +52,9 @@ void MWindow::tranferCards(CardPile &to, NodeT<CardLabel*>* first)
     to.append(first);
     if(first != 0){
         first->value->move(to.getCorner());
+        first->value->setOwnerID(to.getPileID());
         to.makeLastOnTop();
+        to.fixIndexes();
     }
     /*
     int pileid = first->getOwnerID();
@@ -219,6 +221,7 @@ void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)
 
     NodeT<CardLabel*>* nCard = mainOne.disconnectLast();
     mainOne.makeLastOnTop();
+    mainOne.fixIndexes();
     qDebug() << "OK here";
     tranferCards(piles[8], nCard);
     /*
