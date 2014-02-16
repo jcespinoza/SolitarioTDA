@@ -35,6 +35,7 @@ public:
     ListPointerT<CardPile> pileArray;
     CardPile* piles;
 
+    bool checkFoundations();
     void initializePiles();
     void deal();
     void mouseDoubleClickEvent(QMouseEvent*);

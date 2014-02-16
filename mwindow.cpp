@@ -224,6 +224,14 @@ void MWindow::generateLabels(){
     mainOne.fixIndexes();
 }
 
+bool MWindow::checkFoundations()
+{
+    return piles[9].getCount() == 13 &&
+           piles[10].getCount()== 13 &&
+           piles[11].getCount()== 13 &&
+           piles[12].getCount()== 13;
+}
+
 
 void MWindow::deal()
 {
