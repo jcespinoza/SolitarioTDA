@@ -122,7 +122,7 @@ void MWindow::showHideCard(CardLabel *card, bool v)
     }
 }
 
-void MWindow::tranferCards(CardPile &to, NodeT<CardLabel*>* first, bool showPrevious)
+void MWindow::transferCards(CardPile &to, NodeT<CardLabel*>* first, bool showPrevious)
 {
     if(first != 0){
         QPoint newCoords = to.getCorner();
@@ -143,7 +143,7 @@ void MWindow::resetMain()
     NodeT<CardLabel*>* nCard = piles[8].disconnectLast();
     while(nCard != 0){
         nCard->value->hide();
-        tranferCards(mainOne, nCard, false);
+        transferCards(mainOne, nCard, false);
         nCard = piles[8].disconnectLast();
     }
     piles[8].makeLastOnTop();
@@ -220,6 +220,8 @@ void MWindow::cardDragged(QMouseEvent *, CardLabel *card)
     int oldpid = card->getOwnerID();
     if(oldpid == 0)
         return; //cards in mainOne cannot be dragged
+    //NodeT<CardLabel*>* first = piles[oldpid].getPointer(card);
+    //transferCards(piles[13], first, false);
 
 
 
@@ -254,14 +256,14 @@ void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)
 
     NodeT<CardLabel*>* nCard = mainOne.disconnectLast();
     nCard->value->show();
-    tranferCards(piles[8], nCard, false);
+    transferCards(piles[8], nCard, false);
 
     NodeT<CardLabel*>* nCard2 = mainOne.disconnectLast();
     nCard2->value->show();
-    tranferCards(piles[8], nCard2, false);
+    transferCards(piles[8], nCard2, false);
     NodeT<CardLabel*>* nCard3 = mainOne.disconnectLast();
     nCard3->value->show();
-    tranferCards(piles[8], nCard3, false);
+    transferCards(piles[8], nCard3, false);
 
     mainOne.makeLastOnTop();
     mainOne.fixIndexes();
