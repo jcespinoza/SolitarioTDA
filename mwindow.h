@@ -40,7 +40,7 @@ public:
     void mouseDoubleClickEvent(QMouseEvent*);
     CardPile mainOne;
 public slots:
-    void cardPressed(QMouseEvent*, CardLabel*);
+    void cardDragged(QMouseEvent*, CardLabel*);
     void cardMoved(QMouseEvent*, CardLabel *);
     void cardReleased(QMouseEvent*, CardLabel *);
     void cardDoubleClick(QMouseEvent*, CardLabel*);

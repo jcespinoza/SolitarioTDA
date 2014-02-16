@@ -77,6 +77,20 @@ public:
         }
     }
 
+    void updatePosFrom(CardLabel* from){
+        NodeT<CardLabel*>* frNode = getPointer(from);
+
+        if(frNode == 0)
+            return;
+        QPoint originalpos = from->pos();
+        NodeT<CardLabel*>* cursor = frNode->next;
+        while(cursor != 0){
+            cursor->value->move(originalpos + QPoint(0,27));
+            originalpos = cursor->value->pos();
+            cursor = cursor->next;
+        }
+    }
+
     void setPileID(int id){
         pileID = id;
     }

@@ -156,7 +156,7 @@ void MWindow::generateLabels(){
         for(int j = 1; j <= 13; j++){
             CardLabel* lCard = new CardLabel(this);
             connect(lCard, SIGNAL(showHide(CardLabel*,bool)), this, SLOT(showHideCard(CardLabel*,bool)));
-            connect(lCard, SIGNAL(mousePressed(QMouseEvent*,CardLabel*)), this, SLOT(cardPressed(QMouseEvent*,CardLabel*)));
+            connect(lCard, SIGNAL(mouseDragged(QMouseEvent*,CardLabel*)), this, SLOT(cardDragged(QMouseEvent*,CardLabel*)));
             connect(lCard, SIGNAL(mouseDoubleClick(QMouseEvent*,CardLabel*)), this, SLOT(cardDoubleClick(QMouseEvent*,CardLabel*)));
             connect(lCard, SIGNAL(mouseReleased(QMouseEvent*,CardLabel*)), this, SLOT(cardReleased(QMouseEvent*,CardLabel*)));
             connect(lCard, SIGNAL(mouseMoved(QMouseEvent*,CardLabel*)), this, SLOT(cardMoved(QMouseEvent*,CardLabel*)));
@@ -214,20 +214,36 @@ void MWindow::mouseDoubleClickEvent(QMouseEvent *e)
 }
 
 
-void MWindow::cardPressed(QMouseEvent *, CardLabel *)
+void MWindow::cardDragged(QMouseEvent *, CardLabel *card)
 {
+    card->setOldOwnerID(card->getOldOwnerID());
+    int oldpid = card->getOwnerID();
+    if(oldpid == 0)
+        return; //cards in mainOne cannot be dragged
+
+
 
 }
 
-void MWindow::cardMoved(QMouseEvent *, CardLabel *)
+void MWindow::cardMoved(QMouseEvent *, CardLabel *card)
 {
-
+    int pileid = card->getOwnerID();
+    piles[pileid].updatePosFrom(card);
 }
 
-void MWindow::cardReleased(QMouseEvent *, CardLabel *card)
+void MWindow::cardReleased(QMouseEvent *e, CardLabel *card)
 {
     int oldpid = card->getOwnerID();
+    QPoint cPoint = card->pos();
+    //Check the piles first
 
+    //Check childAt to see if there's any card near
+
+    //IF found a place to drop, save the pileid of the destination
+        //validate the movement
+            //test pile Type
+            //testing emptyness
+            //check the last card
 }
 
 void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)

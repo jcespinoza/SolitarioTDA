@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QDebug>
 #include <QMouseEvent>
+#include <cmath>
 
 class CardLabel: public QLabel
 {
@@ -15,16 +16,22 @@ public:
     void mouseReleaseEvent(QMouseEvent*);
     void mouseDoubleClickEvent(QMouseEvent*);
 
+    const int static CARD_WIDTH = 135;
+    const int static CARD_HEIGHT = 201;
     QPoint offset;
     int family;
     int number;
     int cid;
     int oid;
+    int oldowner;
     bool isOnTopB;
+    bool onAir;
 
 
     bool isOnTop(){return isOnTopB;}
     void setOnTop(bool val){isOnTopB = val;}
+    bool isOnAir(){return onAir;}
+    void setOnAir(bool val){onAir = val;}
 
     bool hasFaceUp(){
         return property("faceup").toBool();
@@ -65,8 +72,15 @@ public:
     void setOwnerID(int id){
         oid = id;
     }
+    int getOldOwnerID(){
+
+        return oldowner;
+    }
+    void setOldOwnerID(int id){
+        oldowner = id;
+    }
 signals:
-    void mousePressed(QMouseEvent*, CardLabel *);
+    void mouseDragged(QMouseEvent*, CardLabel *);
     void mouseMoved(QMouseEvent*, CardLabel *);
     void mouseReleased(QMouseEvent*, CardLabel *);
     void mouseDoubleClick(QMouseEvent*, CardLabel*);
