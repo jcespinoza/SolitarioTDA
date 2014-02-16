@@ -180,8 +180,14 @@ bool MWindow::moveIsValid(CardLabel *card, int dest_pile)
         if(!dest.isEmpty() && dest.getLast()->getCardNumber() != cNumber-1)
             return false;
         return true;
-    }else if(true){
-
+    }else{
+        if(dest.isEmpty() && cNumber != 13)
+            return false;
+        if(!dest.isEmpty() && (dest.getLast()->isRed() == card->isRed()))
+            return false;
+        if(!dest.isEmpty() && (dest.getLast()->getCardNumber() != cNumber+1))
+            return false;
+        return true;
     }
     //test pile Type
     //testing emptyness

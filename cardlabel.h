@@ -27,6 +27,7 @@ public:
     bool isOnTopB;
     bool onAir;
 
+    bool isRed(){return family == 1 || family == 2;}
 
     bool isOnTop(){return isOnTopB;}
     void setOnTop(bool val){isOnTopB = val;}
