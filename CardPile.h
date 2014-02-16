@@ -38,9 +38,6 @@ public:
                 && lhs.xc == xc && lhs.yc == yc);
     }
 
-    bool isEmpty(){
-        return getCount() == 0;
-    }
     void fixIndexes(){
         NodeT<CardLabel*> *cursor = this->firstN;
         for(int i = 0; i < getCount();i ++){

@@ -166,9 +166,20 @@ int MWindow::getDistance(QPoint p1, QPoint p2)
 
 bool MWindow::moveIsValid(CardLabel *card, int dest_pile)
 {
+    int cFamily = card->getFamily();
+    int cNumber = card->getCardNumber();
+    CardPile dest = piles[dest_pile];
     //Check the foundations first
     if(dest_pile > 8){
-
+        if(piles[13].getPointer(card)->next != 0)
+            return false;
+        if(dest.isEmpty() && cNumber != 1)
+            return false;
+        if(!dest.isEmpty() && dest.getLast()->getFamily() != cFamily)
+            return false;
+        if(!dest.isEmpty() && dest.getLast()->getCardNumber() != cNumber-1)
+            return false;
+        return true;
     }else if(true){
 
     }
@@ -251,9 +262,7 @@ void MWindow::cardDragged(QMouseEvent *, CardLabel *card)
     int indexF = piles[oldpid].getIndex(card);
     NodeT<CardLabel*>* first = piles[oldpid].disconnectFrom(indexF);
     transferCards(piles[13], first, false);
-
-
-
+    qDebug() << "I'm being dragged";
 }
 
 void MWindow::cardMoved(QMouseEvent *, CardLabel *card)
@@ -284,17 +293,20 @@ void MWindow::cardReleased(QMouseEvent *, CardLabel *card)
     }
 
     int indexOfCard = piles[13].getIndex(card);
-    NodeT<CardLabel*>* first = piles[13].disconnectFrom(indexOfCard);
+    NodeT<CardLabel*>* first = 0;
     card->setOnAir(false);
     if(indexFound != -1 && moveIsValid(card, indexFound)){
         //validate the movement
         qDebug() << "it is fine to move";
         //Move the card to wherever the calculations
-        transferCards(piles[indexFound], first, true);
+        first = piles[13].disconnectFrom(indexOfCard);
+        transferCards(piles[indexFound], first, indexFound < 8);
         piles[indexFound].updatePosFrom(card);
         piles[oldpid].unconverLast();
     }else{
+        first = piles[13].disconnectFrom(indexOfCard);
         transferCards(piles[oldpid], first, false);
+        piles[oldpid].updatePosFrom(card);
     }
 }
 
