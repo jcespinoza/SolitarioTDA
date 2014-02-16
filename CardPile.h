@@ -22,16 +22,16 @@ public:
     int getX(){return xc;}
     int getY(){return yc;}
 
-    void setX(int p){xc = p;}
-    void setY(int p){yc = p;}
+    void setX(int p){ xc = p; startCorner.rx() = xc;}
+    void setY(int p){ yc = p; startCorner.rx() = yc;}
 
     QPoint getCorner(){
         return startCorner;
     }
-    void setCorner(QPoint p){
 
-        startCorner = p;
-    }
+    QPoint getCenter(){ return startCorner + QPoint(67,100);}
+
+    void setCorner(QPoint p){startCorner = p; xc = p.rx(); yc = p.ry();}
 
     bool operator==(const CardPile& lhs){
         return (lhs.firstN == firstN && lhs.count == count
@@ -63,7 +63,7 @@ public:
     }
 
     void unconverLast(){
-        if(count>1){
+        if(count>=1){
             get(count-1)->show();
             get(count-1)->setOnTop(true);
         }

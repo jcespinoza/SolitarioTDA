@@ -150,6 +150,34 @@ void MWindow::resetMain()
     piles[8].fixIndexes();
 }
 
+int MWindow::getDistance(QPoint p1, QPoint p2)
+{
+    int x1 = p1.x();
+    int y1 = p1.y();
+    int x2 = p2.x();
+    int y2 = p2.y();
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    int dx2 = pow(dx, 2);
+    int dy2 = pow(dy, 2);
+    int distance = sqrt(dx2+dy2);
+    return distance;
+}
+
+bool MWindow::moveIsValid(CardLabel *card, int dest_pile)
+{
+    //Check the foundations first
+    if(dest_pile > 8){
+
+    }else if(true){
+
+    }
+    //test pile Type
+    //testing emptyness
+    //check the last card
+    return true;
+}
+
 void MWindow::generateLabels(){
     int index = 0;
     for(int i = 0; i < 4; i++){
@@ -169,7 +197,7 @@ void MWindow::generateLabels(){
             lCard->raise();
 
             mainOne.insert(index,lCard);
-            lCard->setGeometry(20,20, 135, 201);
+            lCard->setGeometry(20,20, CardLabel::CARD_WIDTH, CardLabel::CARD_HEIGHT);
             index++;
         }
     }
@@ -234,28 +262,40 @@ void MWindow::cardMoved(QMouseEvent *, CardLabel *card)
     piles[pileid].updatePosFrom(card);
 }
 
-void MWindow::cardReleased(QMouseEvent *e, CardLabel *card)
+void MWindow::cardReleased(QMouseEvent *, CardLabel *card)
 {
     int oldpid = card->getOldOwnerID();
     //at this point the oldOwner ID is the id of the Pile
     //where the card was before being transferred to the aero pile
 
-    QPoint cPoint = card->pos();
-    //Check the piles first
+    QPoint center = card->getCenter();
+    int distance = -1;
+    int indexFound = -1;
 
-    //Check childAt to see if there's any card near
+    //Check the piles first. All except mainOne (0)  and aero (13)
+    for(int i = 1; i < 13; i++){
+        distance = getDistance(center, piles[i].getCenter());
+        //distance must be greater than -1 and less than half the width of a card
+        //i must not be 8 (temp_store)
+        if(distance > -1 && distance < CardLabel::CARD_WIDTH/1.5 && i != 8){
+            indexFound = i;
+            break;
+        }
+    }
 
-    //IF found a place to drop, save the pileid of the destination
-        //validate the movement
-            //test pile Type
-            //testing emptyness
-            //check the last card
-    //If everything fails, take it back to its old pile
-    int indexF = piles[13].getIndex(card);
-    qDebug() << "Index is " << indexF;
-    NodeT<CardLabel*>* first = piles[13].disconnectFrom(indexF);
-    transferCards(piles[oldpid], first, false);
+    int indexOfCard = piles[13].getIndex(card);
+    NodeT<CardLabel*>* first = piles[13].disconnectFrom(indexOfCard);
     card->setOnAir(false);
+    if(indexFound != -1 && moveIsValid(card, indexFound)){
+        //validate the movement
+        qDebug() << "it is fine to move";
+        //Move the card to wherever the calculations
+        transferCards(piles[indexFound], first, true);
+        piles[indexFound].updatePosFrom(card);
+        piles[oldpid].unconverLast();
+    }else{
+        transferCards(piles[oldpid], first, false);
+    }
 }
 
 void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)

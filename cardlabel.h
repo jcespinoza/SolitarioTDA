@@ -70,6 +70,7 @@ public:
         return oid;
     }
     void setOwnerID(int id){
+        setProperty("ownerid", id);
         oid = id;
     }
     int getOldOwnerID(){
@@ -77,8 +78,14 @@ public:
         return oldowner;
     }
     void setOldOwnerID(int id){
+        setProperty("oldownerid", id);
         oldowner = id;
     }
+
+    QPoint getCenter(){
+        return pos() + QPoint(67,100);
+    }
+
 signals:
     void mouseDragged(QMouseEvent*, CardLabel *);
     void mouseMoved(QMouseEvent*, CardLabel *);

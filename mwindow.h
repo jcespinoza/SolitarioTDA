@@ -47,6 +47,8 @@ public slots:
     void showHideCard(CardLabel*, bool);
     void transferCards(CardPile &to, NodeT<CardLabel*>* first , bool showPrevious);
     void resetMain();
+    int getDistance(QPoint, QPoint);
+    bool moveIsValid(CardLabel*, int);
 
 private:
     Ui::MWindow *ui;
