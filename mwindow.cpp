@@ -216,12 +216,13 @@ void MWindow::mouseDoubleClickEvent(QMouseEvent *e)
 
 void MWindow::cardDragged(QMouseEvent *, CardLabel *card)
 {
-    card->setOldOwnerID(card->getOldOwnerID());
+    card->setOldOwnerID(card->getOwnerID());
     int oldpid = card->getOwnerID();
     if(oldpid == 0)
         return; //cards in mainOne cannot be dragged
-    //NodeT<CardLabel*>* first = piles[oldpid].getPointer(card);
-    //transferCards(piles[13], first, false);
+    int indexF = piles[oldpid].getIndex(card);
+    NodeT<CardLabel*>* first = piles[oldpid].disconnectFrom(indexF);
+    transferCards(piles[13], first, false);
 
 
 
@@ -235,7 +236,10 @@ void MWindow::cardMoved(QMouseEvent *, CardLabel *card)
 
 void MWindow::cardReleased(QMouseEvent *e, CardLabel *card)
 {
-    int oldpid = card->getOwnerID();
+    int oldpid = card->getOldOwnerID();
+    //at this point the oldOwner ID is the id of the Pile
+    //where the card was before being transferred to the aero pile
+
     QPoint cPoint = card->pos();
     //Check the piles first
 
@@ -246,6 +250,12 @@ void MWindow::cardReleased(QMouseEvent *e, CardLabel *card)
             //test pile Type
             //testing emptyness
             //check the last card
+    //If everything fails, take it back to its old pile
+    int indexF = piles[13].getIndex(card);
+    qDebug() << "Index is " << indexF;
+    NodeT<CardLabel*>* first = piles[13].disconnectFrom(indexF);
+    transferCards(piles[oldpid], first, false);
+    card->setOnAir(false);
 }
 
 void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)

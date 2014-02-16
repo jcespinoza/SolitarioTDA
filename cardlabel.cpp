@@ -28,6 +28,7 @@ void CardLabel::mouseMoveEvent(QMouseEvent *event)
 
 void CardLabel::mouseReleaseEvent(QMouseEvent *e)
 {
+    if(!hasFaceUp()) return;
     emit mouseReleased(e, this);
     setOnAir(false);
 }
