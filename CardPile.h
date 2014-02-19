@@ -51,22 +51,31 @@ public:
                 qDebug() << "Changed the card ID to " << i;
                 cursor->value->raise();
                 qDebug() << "Succesfully set the card on top of the screen";
+                cursor = cursor->next;
+                qDebug() << "Succesfully changed the cursor to the next node in the list";
+            }else{
+                qDebug() << "It was null";
             }
-            qDebug() << "Out of the contidion. Lets change the cursor's value to it next";
-            cursor = cursor->next;
-            qDebug() << "Succesfully changed the cursor to the next node in the list";
         }
         qDebug() << "Method wich fixes the cards' IDs finished##";
     }
 
     void makeLastOnTop(){
+        qDebug() << "##makeLastOnTop method";
         NodeT<CardLabel*>* cursor = firstN;
         while(cursor != 0){
+            qDebug() << "Cursor was not null so it entered the loop";
             cursor->value->setOnTop(false);
-            if(cursor->next == 0)
+            qDebug() << "Set the card's OnTop attribute to false";
+            if(cursor->next == 0){
+                qDebug() << "The next was null so this is the last one in the pile";
                 cursor->value->setOnTop(true);
+                qDebug() << "Set the ontop attribute to true";
+            }
+            qDebug() << "NOw lets change the cursor to its next";
             cursor = cursor->next;
         }
+        qDebug() << "##makeLastOnTop complete";
     }
 
     void unconverLast(){

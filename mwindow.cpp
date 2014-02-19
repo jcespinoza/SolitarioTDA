@@ -124,17 +124,24 @@ void MWindow::showHideCard(CardLabel *card, bool v)
 
 void MWindow::transferCards(CardPile &to, NodeT<CardLabel*>* first, bool showPrevious)
 {
+    qDebug() << "##TransferCards Method";
     if(first != 0){
         QPoint newCoords = to.getCorner();
         NodeT<CardLabel*>* ls = to.last();
         if(ls != 0 && showPrevious)
             newCoords = ls->value->pos() + QPoint(0, 27);
         first->value->move(newCoords);
+        qDebug() << "Set a new display location OK";
         to.append(first);
+        qDebug() << "Appended the card to the new pile OK";
         first->value->setOwnerID(to.getPileID());
+        qDebug() << "Set a new owner for the card";
         to.makeLastOnTop();
+        qDebug() << "Ran the makeOnTop OK";
         to.fixIndexes();
+        qDebug() << "Ran the fixIndex method";
     }
+    qDebug() << "##Transfer Method complete";
 }
 
 void MWindow::resetMain()
@@ -166,19 +173,27 @@ int MWindow::getDistance(QPoint p1, QPoint p2)
 
 bool MWindow::moveIsValid(CardLabel *card, int dest_pile)
 {
+    qDebug() << "About to validate the move with" << card << "and" << dest_pile;
     int cFamily = card->getFamily();
     int cNumber = card->getCardNumber();
+    qDebug() << "Card details Family: " << family_names.get(cFamily) << "isRed?" << card->isRed() << " Number:" << cNumber << "Owner" << card->getOwnerID();
     CardPile dest = piles[dest_pile];
     //Check the foundations first
     if(dest_pile > 8){
+        qDebug() << "Lets see if the pile is null";
         if(piles[13].getPointer(card)->next != 0)
             return false;
+        qDebug() << "The card is alone. Test passed";
         if(dest.isEmpty() && cNumber != 1)
             return false;
+        qDebug() << "Card is an ace or the list was not empty. Test passed";
         if(!dest.isEmpty() && dest.getLast()->getFamily() != cFamily)
             return false;
+        qDebug() << "Pile was empty or the family of the front card was not the same. Test passed";
         if(!dest.isEmpty() && dest.getLast()->getCardNumber() != cNumber-1)
             return false;
+        qDebug() << "Pile was empty or the number of the front card was not compatible";
+        qDebug() << "All tests passed. Returning true";
         return true;
     }else{
         if(dest.isEmpty() && cNumber != 13)
@@ -189,9 +204,6 @@ bool MWindow::moveIsValid(CardLabel *card, int dest_pile)
             return false;
         return true;
     }
-    //test pile Type
-    //testing emptyness
-    //check the last card
     return true;
 }
 
@@ -347,10 +359,17 @@ void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)
     transferCards(piles[8], nCard, false);
 
     NodeT<CardLabel*>* nCard2 = mainOne.disconnectLast();
-    nCard2->value->show();
+    if(nCard2 != 0)
+        nCard2->value->show();
+    if(nCard2 == 0)
+        qDebug() << "Card2 was null";
     transferCards(piles[8], nCard2, false);
+
     NodeT<CardLabel*>* nCard3 = mainOne.disconnectLast();
-    nCard3->value->show();
+    if(nCard3 != 0)
+        nCard3->value->show();
+    if(nCard3 == 0)
+        qDebug() << "Card3 was null";
     transferCards(piles[8], nCard3, false);
 
     mainOne.makeLastOnTop();
