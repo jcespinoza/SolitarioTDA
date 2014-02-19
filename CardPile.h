@@ -39,15 +39,24 @@ public:
     }
 
     void fixIndexes(){
-        qDebug() << "Running the method to fix the cards' ids";
+        qDebug() << "##Running the method to fix the cards' ids";
         NodeT<CardLabel*> *cursor = this->firstN;
+        qDebug() << "Created a cursor pointer. About to enter a cycle that will run" << getCount() << "times";
         for(int i = 0; i < getCount();i ++){
+            qDebug() << "Run #" << i;
+            qDebug() << "Checking if the cursor is not null";
             if(cursor != 0){
+                qDebug() << "It wasnt so its safe to change the card's ID";
                 cursor->value->setCardID(i);
+                qDebug() << "Changed the card ID to " << i;
                 cursor->value->raise();
+                qDebug() << "Succesfully set the card on top of the screen";
             }
+            qDebug() << "Out of the contidion. Lets change the cursor's value to it next";
             cursor = cursor->next;
+            qDebug() << "Succesfully changed the cursor to the next node in the list";
         }
+        qDebug() << "Method wich fixes the cards' IDs finished##";
     }
 
     void makeLastOnTop(){

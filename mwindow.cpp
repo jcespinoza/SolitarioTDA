@@ -235,7 +235,7 @@ bool MWindow::checkFoundations()
 
 void MWindow::deal()
 {
-    qDebug() << "Deal method...";
+    qDebug() << "##Deal method...";
     for(int i = 1; i <= 7; i++){
         qDebug() << "Dealing cards to Pile with ID; " << i;
         for(int j = 1; j <= i; j++){
@@ -264,10 +264,14 @@ void MWindow::deal()
             }
         }
         piles[i].fixIndexes();
+        qDebug() << "Ran the method wich fixes indexes on pile" << i << "succesfully";
     }
     mainOne.fixIndexes();
+    qDebug() << "Ran the method wich fixes indexes on the main deck succesfully";
     mainOne.updateCount();
+    qDebug() << "Ran the updateCount() method on the main deck although it was done many times in the cycle";
     mainOne.last()->value->setOnTop(true);
+    qDebug() << "Set the last card's attribute in the maindeck to false";
 }
 
 void MWindow::mouseDoubleClickEvent(QMouseEvent *e)
@@ -288,7 +292,6 @@ void MWindow::cardDragged(QMouseEvent *, CardLabel *card)
     int indexF = piles[oldpid].getIndex(card);
     NodeT<CardLabel*>* first = piles[oldpid].disconnectFrom(indexF);
     transferCards(piles[13], first, false);
-    qDebug() << "I'm being dragged";
 }
 
 void MWindow::cardMoved(QMouseEvent *, CardLabel *card)
