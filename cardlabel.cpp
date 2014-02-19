@@ -6,8 +6,13 @@ CardLabel::CardLabel(QWidget *parent):QLabel(parent)
     setEnabled(true);
     cid = 0;
     oid = 0;
+    oldowner = 0;
     family = 0;
     number = 0;
+    isOnTopB = false;
+    onAir = false;
+    locked = true;
+
 }
 
 void CardLabel::mouseMoveEvent(QMouseEvent *event)
@@ -43,6 +48,5 @@ void CardLabel::mousePressEvent(QMouseEvent *event)
     if(!hasFaceUp()) return;
     if(isOnTop())
         raise();
-    qDebug() << "myID is: " << getCardID() << "Am I on top?" << isOnTop();
     offset = event->pos();
 }

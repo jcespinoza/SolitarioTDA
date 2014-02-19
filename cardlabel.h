@@ -26,9 +26,13 @@ public:
     int oldowner;
     bool isOnTopB;
     bool onAir;
+    bool locked;
 
     bool isRed(){return family == 1 || family == 2;}
 
+    bool isLocked(){return locked;}
+    void lock(){locked = true;}
+    void unlock(){locked = false;}
     bool isOnTop(){return isOnTopB;}
     void setOnTop(bool val){isOnTopB = val;}
     bool isOnAir(){return onAir;}

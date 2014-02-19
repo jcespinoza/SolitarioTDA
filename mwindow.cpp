@@ -235,20 +235,32 @@ bool MWindow::checkFoundations()
 
 void MWindow::deal()
 {
-
+    qDebug() << "Deal method...";
     for(int i = 1; i <= 7; i++){
+        qDebug() << "Dealing cards to Pile with ID; " << i;
         for(int j = 1; j <= i; j++){
             NodeT<CardLabel*>* mCard = mainOne.disconnectLast();
+            qDebug() << "Disconnected a card  from main deck leaving it with a total of " << mainOne.getCount();
+            qDebug() << "Card info: Family: " << family_names.get(mCard->value->getFamily()) << "Number: " << mCard->value->getCardNumber();
             //pileArray.get(i).append(mCard);
             piles[i].append(mCard);
+            qDebug() << "Appended the card located at " << mCard->value->pos()<< "to Pile with ID " << i;
+            qDebug() << "Now this pile has" << piles[i].getCount() << "cards on it";
             CardLabel* temp = mCard->value;
             temp->setOwnerID(i);
+            qDebug() << "Now card's owner id is" << temp->getOldOwnerID();
             temp->move(piles[i].getCorner());
+            qDebug() << "Moved the card to" << temp->pos();
             temp->hide();
+            qDebug() << "Hid the card";
             temp->setOnTop(false);
+            qDebug() << "Card's onTop attribute is now false";
             if(j == i){
+                qDebug() << "This is the last card in the pile so...";
                 temp->show();
+                qDebug() << "Set the card's face up";
                 temp->setOnTop(true);
+                qDebug() << "Set the onTop attribute to True";
             }
         }
         piles[i].fixIndexes();
@@ -299,7 +311,7 @@ void MWindow::cardReleased(QMouseEvent *, CardLabel *card)
     for(int i = 1; i < 13; i++){
         distance = getDistance(center, piles[i].getCenter());
         //distance must be greater than -1 and less than half the width of a card
-        //i must not be 8 (temp_store)
+        //it must not be 8 (temp_store)
         if(distance > -1 && distance < CardLabel::CARD_WIDTH/1.5 && i != 8){
             indexFound = i;
             break;
@@ -310,9 +322,6 @@ void MWindow::cardReleased(QMouseEvent *, CardLabel *card)
     NodeT<CardLabel*>* first = 0;
     card->setOnAir(false);
     if(indexFound != -1 && moveIsValid(card, indexFound)){
-        //validate the movement
-        qDebug() << "it is fine to move";
-        //Move the card to wherever the calculations
         first = piles[13].disconnectFrom(indexOfCard);
         transferCards(piles[indexFound], first, indexFound < 8);
         piles[indexFound].updatePosFrom(card);

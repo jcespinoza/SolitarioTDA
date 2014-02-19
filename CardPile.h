@@ -39,6 +39,7 @@ public:
     }
 
     void fixIndexes(){
+        qDebug() << "Running the method to fix the cards' ids";
         NodeT<CardLabel*> *cursor = this->firstN;
         for(int i = 0; i < getCount();i ++){
             if(cursor != 0){
