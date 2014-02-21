@@ -171,10 +171,8 @@ int MWindow::getDistance(QPoint p1, QPoint p2)
 
 bool MWindow::moveIsValid(CardLabel *card, int dest_pile)
 {
-    qDebug() << "About to validate the move with" << card << "and" << dest_pile;
     int cFamily = card->getFamily();
     int cNumber = card->getCardNumber();
-    qDebug() << "Card details Family: " << family_names.get(cFamily) << "isRed?" << card->isRed() << " Number:" << cNumber << "Owner" << card->getOwnerID() << "OldOwner" << card->getOldOwnerID();
     CardPile dest = piles[dest_pile];
     //Check the foundations first
     if(dest_pile > 8){
@@ -279,9 +277,7 @@ void MWindow::cardDragged(QMouseEvent *, CardLabel *card)
         return; //cards in mainOne cannot be dragged
     int indexF = piles[oldpid].getIndex(card);
     NodeT<CardLabel*>* first = piles[oldpid].disconnectFrom(indexF);
-    qDebug() << "TRANSFERRING TO THE AERO PILE";
     transferCards(piles[13], first, false);
-    qDebug() << "TRANSFERRED TO THE AERO PILE";
 }
 
 void MWindow::cardMoved(QMouseEvent *, CardLabel *card)
