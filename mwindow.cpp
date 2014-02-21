@@ -36,6 +36,7 @@ MWindow::~MWindow()
 
 void MWindow::initializePiles()
 {
+    
     //pileArray.insert(0, mainOne); //mainOne has index 0
     piles[0] = mainOne;
     mainOne.setPileID(0);
@@ -124,24 +125,21 @@ void MWindow::showHideCard(CardLabel *card, bool v)
 
 void MWindow::transferCards(CardPile &to, NodeT<CardLabel*>* first, bool showPrevious)
 {
-    qDebug() << "##TransferCards Method";
     if(first != 0){
         QPoint newCoords = to.getCorner();
         NodeT<CardLabel*>* ls = to.last();
         if(ls != 0 && showPrevious)
-            newCoords = ls->value->pos() + QPoint(0, 27);
-        first->value->move(newCoords);
-        qDebug() << "Set a new display location OK";
+            newCoords = ls->value->pos() + QPoint(0, 28);
+        if( to.getPileID() != 13)
+            first->value->move(newCoords);
         to.append(first);
-        qDebug() << "Appended the card to the new pile OK";
-        first->value->setOwnerID(to.getPileID());
-        qDebug() << "Set a new owner for the card";
+
+        CardPile::updateOwner(first, to.getPileID());
+        //first->value->setOwnerID(to.getPileID());
+
         to.makeLastOnTop();
-        qDebug() << "Ran the makeOnTop OK";
         to.fixIndexes();
-        qDebug() << "Ran the fixIndex method";
     }
-    qDebug() << "##Transfer Method complete";
 }
 
 void MWindow::resetMain()
@@ -176,24 +174,18 @@ bool MWindow::moveIsValid(CardLabel *card, int dest_pile)
     qDebug() << "About to validate the move with" << card << "and" << dest_pile;
     int cFamily = card->getFamily();
     int cNumber = card->getCardNumber();
-    qDebug() << "Card details Family: " << family_names.get(cFamily) << "isRed?" << card->isRed() << " Number:" << cNumber << "Owner" << card->getOwnerID();
+    qDebug() << "Card details Family: " << family_names.get(cFamily) << "isRed?" << card->isRed() << " Number:" << cNumber << "Owner" << card->getOwnerID() << "OldOwner" << card->getOldOwnerID();
     CardPile dest = piles[dest_pile];
     //Check the foundations first
     if(dest_pile > 8){
-        qDebug() << "Lets see if the pile is null";
         if(piles[13].getPointer(card)->next != 0)
             return false;
-        qDebug() << "The card is alone. Test passed";
         if(dest.isEmpty() && cNumber != 1)
             return false;
-        qDebug() << "Card is an ace or the list was not empty. Test passed";
         if(!dest.isEmpty() && dest.getLast()->getFamily() != cFamily)
             return false;
-        qDebug() << "Pile was empty or the family of the front card was not the same. Test passed";
         if(!dest.isEmpty() && dest.getLast()->getCardNumber() != cNumber-1)
             return false;
-        qDebug() << "Pile was empty or the number of the front card was not compatible";
-        qDebug() << "All tests passed. Returning true";
         return true;
     }else{
         if(dest.isEmpty() && cNumber != 13)
@@ -230,8 +222,8 @@ void MWindow::generateLabels(){
             index++;
         }
     }
-    srand ( unsigned ( time(0) ) );
-    for(int i = 0; i < mainOne.getCount(); i++)
+    //srand ( unsigned ( time(0) ) );
+    for(int i = 4; i < mainOne.getCount(); i++)
         mainOne.shuffleItems();
     mainOne.fixIndexes();
 }
@@ -247,43 +239,27 @@ bool MWindow::checkFoundations()
 
 void MWindow::deal()
 {
-    qDebug() << "##Deal method...";
     for(int i = 1; i <= 7; i++){
-        qDebug() << "Dealing cards to Pile with ID; " << i;
         for(int j = 1; j <= i; j++){
             NodeT<CardLabel*>* mCard = mainOne.disconnectLast();
-            qDebug() << "Disconnected a card  from main deck leaving it with a total of " << mainOne.getCount();
-            qDebug() << "Card info: Family: " << family_names.get(mCard->value->getFamily()) << "Number: " << mCard->value->getCardNumber();
             //pileArray.get(i).append(mCard);
             piles[i].append(mCard);
-            qDebug() << "Appended the card located at " << mCard->value->pos()<< "to Pile with ID " << i;
-            qDebug() << "Now this pile has" << piles[i].getCount() << "cards on it";
             CardLabel* temp = mCard->value;
             temp->setOwnerID(i);
-            qDebug() << "Now card's owner id is" << temp->getOldOwnerID();
             temp->move(piles[i].getCorner());
-            qDebug() << "Moved the card to" << temp->pos();
+
             temp->hide();
-            qDebug() << "Hid the card";
             temp->setOnTop(false);
-            qDebug() << "Card's onTop attribute is now false";
             if(j == i){
-                qDebug() << "This is the last card in the pile so...";
                 temp->show();
-                qDebug() << "Set the card's face up";
                 temp->setOnTop(true);
-                qDebug() << "Set the onTop attribute to True";
             }
         }
         piles[i].fixIndexes();
-        qDebug() << "Ran the method wich fixes indexes on pile" << i << "succesfully";
     }
     mainOne.fixIndexes();
-    qDebug() << "Ran the method wich fixes indexes on the main deck succesfully";
     mainOne.updateCount();
-    qDebug() << "Ran the updateCount() method on the main deck although it was done many times in the cycle";
     mainOne.last()->value->setOnTop(true);
-    qDebug() << "Set the last card's attribute in the maindeck to false";
 }
 
 void MWindow::mouseDoubleClickEvent(QMouseEvent *e)
@@ -303,7 +279,9 @@ void MWindow::cardDragged(QMouseEvent *, CardLabel *card)
         return; //cards in mainOne cannot be dragged
     int indexF = piles[oldpid].getIndex(card);
     NodeT<CardLabel*>* first = piles[oldpid].disconnectFrom(indexF);
+    qDebug() << "TRANSFERRING TO THE AERO PILE";
     transferCards(piles[13], first, false);
+    qDebug() << "TRANSFERRED TO THE AERO PILE";
 }
 
 void MWindow::cardMoved(QMouseEvent *, CardLabel *card)
@@ -361,15 +339,11 @@ void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)
     NodeT<CardLabel*>* nCard2 = mainOne.disconnectLast();
     if(nCard2 != 0)
         nCard2->value->show();
-    if(nCard2 == 0)
-        qDebug() << "Card2 was null";
     transferCards(piles[8], nCard2, false);
 
     NodeT<CardLabel*>* nCard3 = mainOne.disconnectLast();
     if(nCard3 != 0)
         nCard3->value->show();
-    if(nCard3 == 0)
-        qDebug() << "Card3 was null";
     transferCards(piles[8], nCard3, false);
 
     mainOne.makeLastOnTop();
