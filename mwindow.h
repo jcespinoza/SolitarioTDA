@@ -40,6 +40,8 @@ public:
     void deal();
     void mouseDoubleClickEvent(QMouseEvent*);
     CardPile mainOne;
+    int score;
+
 public slots:
     void cardDragged(QMouseEvent*, CardLabel*);
     void cardMoved(QMouseEvent*, CardLabel *);
@@ -50,6 +52,8 @@ public slots:
     void resetMain();
     int getDistance(QPoint, QPoint);
     bool moveIsValid(CardLabel*, int);
+    void updateScore();
+    void gameFinished();
 
 private:
     Ui::MWindow *ui;

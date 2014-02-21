@@ -1,4 +1,6 @@
 #include "mwindow.h"
+#include <QMessageBox>
+#include <QPropertyAnimation>
 #include "ui_mwindow.h"
 #include <algorithm>
 #include <ctime>
@@ -12,7 +14,7 @@ MWindow::MWindow(QWidget *parent) :
     ui->setupUi(this);
 
     ui->main_deck->installEventFilter(this);
-
+    score = 0;
     piles = new CardPile[14];
     pileArray = ListPointerT<CardPile>();
     family_names = ListPointerT<QString>();
@@ -26,6 +28,7 @@ MWindow::MWindow(QWidget *parent) :
     initializePiles();
     generateLabels();
     deal();
+    //gameFinished();
 }
 
 MWindow::~MWindow()
@@ -130,8 +133,18 @@ void MWindow::transferCards(CardPile &to, NodeT<CardLabel*>* first, bool showPre
         NodeT<CardLabel*>* ls = to.last();
         if(ls != 0 && showPrevious)
             newCoords = ls->value->pos() + QPoint(0, 28);
-        if( to.getPileID() != 13)
+        if( to.getPileID() != 13){
+            QPropertyAnimation *animation = new QPropertyAnimation(first->value, "pos");
+             animation->setDuration(300);
+             animation->setStartValue(first->value->pos());
+             animation->setEndValue(newCoords);
+
+             animation->start();
+
+        }
+        if(to.getPileID() != 13 && first->value->getOldOwnerID() != 0)
             first->value->move(newCoords);
+
         to.append(first);
 
         CardPile::updateOwner(first, to.getPileID());
@@ -195,6 +208,33 @@ bool MWindow::moveIsValid(CardLabel *card, int dest_pile)
         return true;
     }
     return true;
+}
+
+void MWindow::updateScore()
+{
+    ui->score_label->setText(QString::number(score));
+}
+
+void MWindow::gameFinished()
+{
+    QMessageBox wMessage(this);
+    wMessage.setText("Felicidades!");
+    wMessage.setInformativeText("Has completado el juego!! Wiii! ^_^");
+    QMessageBox::information(this, "Felicidades!", "Has completado el juego!! Wiii! ^_^", QMessageBox::Ok);
+
+    for(int i = 9; i < 13; i++){
+        CardPile pile = piles[i];
+        NodeT<CardLabel*> *node = pile.first();
+        while(node != 0){
+            QPropertyAnimation *animation = new QPropertyAnimation(node->value, "pos");
+             animation->setDuration(1000);
+             animation->setStartValue(node->value->pos());
+             animation->setEndValue(QPoint(20, 480));
+
+             animation->start();
+             node = node->next;
+        }
+    }
 }
 
 void MWindow::generateLabels(){
@@ -315,11 +355,17 @@ void MWindow::cardReleased(QMouseEvent *, CardLabel *card)
         transferCards(piles[indexFound], first, indexFound < 8);
         piles[indexFound].updatePosFrom(card);
         piles[oldpid].unconverLast();
+        score += 10;
     }else{
         first = piles[13].disconnectFrom(indexOfCard);
         transferCards(piles[oldpid], first, false);
         piles[oldpid].updatePosFrom(card);
+        if(score <= 0)
+            score -= 5;
     }
+    updateScore();
+    if(checkFoundations())
+        gameFinished();
 }
 
 void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)

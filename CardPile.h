@@ -4,6 +4,7 @@
 #include <QDebug>
 #include "cardlabel.h"
 #include <QPoint>
+#include <QPropertyAnimation>
 
 class CardPile: public ListPointerT<CardLabel*>{
 public:
@@ -91,6 +92,15 @@ public:
         NodeT<CardLabel*>* cursor = frNode->next;
         while(cursor != 0){
             cursor->value->move(originalpos + QPoint(0,27));
+            /*QPropertyAnimation *animation = new QPropertyAnimation(cursor->value, "pos");
+             animation->setDuration(50);
+             if(!cursor->value->isOnAir())
+                animation->setStartValue(cursor->value->pos());
+             else
+                 animation->setStartValue(originalpos);
+             animation->setEndValue(originalpos + QPoint(0,27));
+
+             animation->start();*/
             originalpos = cursor->value->pos();
             cursor = cursor->next;
         }
