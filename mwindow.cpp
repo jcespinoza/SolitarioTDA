@@ -222,8 +222,8 @@ void MWindow::generateLabels(){
             index++;
         }
     }
-    //srand ( unsigned ( time(0) ) );
-    for(int i = 4; i < mainOne.getCount(); i++)
+    srand ( unsigned ( time(0) ) );
+    for(int i = 1; i < mainOne.getCount(); i++)
         mainOne.shuffleItems();
     mainOne.fixIndexes();
 }
