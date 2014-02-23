@@ -140,7 +140,6 @@ void MWindow::transferCards(CardPile &to, NodeT<CardLabel*>* first, bool showPre
              animation->setEndValue(newCoords);
 
              animation->start();
-
         }
         if(to.getPileID() != 13 && first->value->getOldOwnerID() != 0)
             first->value->move(newCoords);
@@ -247,11 +246,6 @@ void MWindow::updateScore()
 
 void MWindow::gameFinished()
 {
-    QMessageBox wMessage(this);
-    wMessage.setText("Felicidades!");
-    wMessage.setInformativeText("Has completado el juego!! Wiii! ^_^");
-    QMessageBox::information(this, "Felicidades!", "Has completado el juego!! Wiii! ^_^", QMessageBox::Ok);
-
     for(int i = 9; i < 13; i++){
         CardPile pile = piles[i];
         NodeT<CardLabel*> *node = pile.first();
@@ -267,6 +261,7 @@ void MWindow::gameFinished()
             }
         }
     }
+    QMessageBox::information(this, "Felicidades!", "Has completado el juego!! Wiii! ^_^", QMessageBox::Ok);
 }
 
 void MWindow::generateLabels(){
@@ -292,7 +287,7 @@ void MWindow::generateLabels(){
             index++;
         }
     }
-    //srand ( unsigned ( time(0) ) );
+    srand ( unsigned ( time(0) ) );
     for(int i = 4; i < mainOne.getCount(); i++)
         mainOne.shuffleItems();
     mainOne.fixIndexes();
