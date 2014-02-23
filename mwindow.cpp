@@ -177,7 +177,7 @@ void MWindow::throwToFoundation(CardLabel* card)
             piles[oldpid].unconverLast();
             score += 10;
         }else{
-            if(score <= 0)
+            if(score >= 5)
                 score -= 5;
         }
         updateScore();
@@ -255,15 +255,16 @@ void MWindow::gameFinished()
     for(int i = 9; i < 13; i++){
         CardPile pile = piles[i];
         NodeT<CardLabel*> *node = pile.first();
-        for(int j = 0; i < piles[i].getCount(); j++){
-            if(node == 0) continue;
-            QPropertyAnimation *animation = new QPropertyAnimation(node->value, "pos");
-             animation->setDuration((13+13)*100 - i*100 - j*100);
-             animation->setStartValue(node->value->pos());
-             animation->setEndValue(QPoint(20, 480));
+        for(int j = 0; j < pile.getCount(); j++){
+            if(node != 0){
+                QPropertyAnimation *animation = new QPropertyAnimation(node->value, "pos");
+                 animation->setDuration((13+13)*100 - i*100 - j*100);
+                 animation->setStartValue(node->value->pos());
+                 animation->setEndValue(QPoint(20, 480));
 
-             animation->start();
-             node = node->next;
+                 animation->start();
+                 node = node->next;
+            }
         }
     }
 }
