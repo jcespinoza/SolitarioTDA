@@ -49,4 +49,5 @@ void CardLabel::mousePressEvent(QMouseEvent *event)
     if(isOnTop())
         raise();
     offset = event->pos();
+
 }

@@ -155,6 +155,36 @@ void MWindow::transferCards(CardPile &to, NodeT<CardLabel*>* first, bool showPre
     }
 }
 
+void MWindow::throwToFoundation(CardLabel* card)
+{
+    if(card == 0) return;
+    int oldpid = card->getOwnerID();
+    int indexFound = -1;
+    for( int i = 9; i < 13; i++){
+        if(moveIsValid(card, i)){
+            indexFound = i;
+            break;
+        }
+    }
+
+        int indexOfCard = piles[oldpid].getIndex(card);
+        NodeT<CardLabel*>* first = 0;
+        card->setOnAir(false);
+        if(indexFound != -1){
+            first = piles[card->getOwnerID()].disconnectFrom(indexOfCard);
+            transferCards(piles[indexFound], first, false);
+            piles[indexFound].updatePosFrom(card);
+            piles[oldpid].unconverLast();
+            score += 10;
+        }else{
+            if(score <= 0)
+                score -= 5;
+        }
+        updateScore();
+        if(checkFoundations())
+            gameFinished();
+}
+
 void MWindow::resetMain()
 {
     //Method to reset the main pile here
@@ -189,7 +219,7 @@ bool MWindow::moveIsValid(CardLabel *card, int dest_pile)
     CardPile dest = piles[dest_pile];
     //Check the foundations first
     if(dest_pile > 8){
-        if(piles[13].getPointer(card)->next != 0)
+        if(piles[card->getOwnerID()].getPointer(card)->next != 0)
             return false;
         if(dest.isEmpty() && cNumber != 1)
             return false;
@@ -225,9 +255,10 @@ void MWindow::gameFinished()
     for(int i = 9; i < 13; i++){
         CardPile pile = piles[i];
         NodeT<CardLabel*> *node = pile.first();
-        while(node != 0){
+        for(int j = 0; i < piles[i].getCount(); j++){
+            if(node == 0) continue;
             QPropertyAnimation *animation = new QPropertyAnimation(node->value, "pos");
-             animation->setDuration(1000);
+             animation->setDuration((13+13)*100 - i*100 - j*100);
              animation->setStartValue(node->value->pos());
              animation->setEndValue(QPoint(20, 480));
 
@@ -260,8 +291,8 @@ void MWindow::generateLabels(){
             index++;
         }
     }
-    srand ( unsigned ( time(0) ) );
-    for(int i = 1; i < mainOne.getCount(); i++)
+    //srand ( unsigned ( time(0) ) );
+    for(int i = 4; i < mainOne.getCount(); i++)
         mainOne.shuffleItems();
     mainOne.fixIndexes();
 }
@@ -368,11 +399,15 @@ void MWindow::cardReleased(QMouseEvent *, CardLabel *card)
         gameFinished();
 }
 
-void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)
+void MWindow::cardDoubleClick(QMouseEvent *e, CardLabel *card)
 {
     int wPile = card->getOwnerID();
-    if(wPile != 0 || !card->isOnTop())
-        return;
+
+    if(wPile > 0 && wPile < 13 && card->isOnTop()){
+        throwToFoundation(card);
+    }
+
+    if(wPile == 0 && card->isOnTop()){
 
     NodeT<CardLabel*>* nCard = mainOne.disconnectLast();
     nCard->value->show();
@@ -390,4 +425,5 @@ void MWindow::cardDoubleClick(QMouseEvent *, CardLabel *card)
 
     mainOne.makeLastOnTop();
     mainOne.fixIndexes();
+    }
 }

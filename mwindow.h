@@ -49,6 +49,7 @@ public slots:
     void cardDoubleClick(QMouseEvent*, CardLabel*);
     void showHideCard(CardLabel*, bool);
     void transferCards(CardPile &to, NodeT<CardLabel*>* first , bool showPrevious);
+    void throwToFoundation(CardLabel *);
     void resetMain();
     int getDistance(QPoint, QPoint);
     bool moveIsValid(CardLabel*, int);
